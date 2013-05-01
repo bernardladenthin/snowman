@@ -3,6 +3,7 @@ Simple aNd Open Webcam MANagement.
 
   * Hosting on Google Code: [http://code.google.com/p/snowman/](http://code.google.com/p/snowman-php-server/)
   * GitHub mirror: [https://github.com/bernardladenthin/snowman](https://github.com/bernardladenthin/snowman)
+  * Bitbucket mirror: [https://bitbucket.org/Bernicc/snowman](https://bitbucket.org/Bernicc/snowman)
   * Documentation: [http://code.google.com/p/snowman/](http://code.google.com/p/snowman/)
 
 ##snowman-php-server
@@ -26,12 +27,10 @@ Python script to archive images using avconv.
   * Code license: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ##snowman-py-ffmpeg
-============================
 Python script to archive images using ffmpeg.
   * Code license: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ##snowman-py-record
-============================
 Python script to record images and load them afterwards on a snowman-php-server via snowman-cpp-upload.
   * Code license: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
