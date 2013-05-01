@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<!--
+/**
+ * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
+ * http://code.google.com/p/snowman/
+ *
+ * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+	<script type="text/javascript">
+		/**
+		 * global appData object and standard api url
+		 * do not remove this, the first api call need this standard url
+		 * you can put here your server address, relative or absolute
+		 */
+
+/*
+		appData = {
+			"serverinformation" : {
+				"ajaxApiUrl" : "./ajax.php"
+			}
+		}
+*/
+		//TODO: use a input field on start
+		appData = {
+			"serverinformation" : {
+				"ajaxApiUrl" : "http://example.com/snowman-php-server/ajaxapi.php"
+			}
+		}
+	</script>
+	<title>snowman-html5-app</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+
+	<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
+	<script type="text/javascript" src="http://snowman.googlecode.com/files/snowman-html5-canvasapi-1.0.0.min.js"></script>
+
+	<script type="text/javascript" src="./js/fastFrag.min.js"></script>
+	<script type="text/javascript" src="./js/javascript.js"></script>
+	<script type="text/javascript" src="./js/htmlDef.js"></script>
+	<script type="text/javascript" src="./js/page.js"></script>
+</head>
+<body>
+<script>
+
+$('<style type="text/css">'
++ toClSel(htmlDef.img.miniajaxloader.cl) + "{height:16px;padding-right:10px;}"
++ toIdSel(htmlDef.page.cameraview.content.camerapicture.id) + "{text-align:center;}"
+
++ toIdSel(htmlDef.page.cameraview.content.canvasLiveview.id) +
+	  "{"
+	+ "max-width:100%;"
+	+ "border:1px solid #bbbbbb;"
+	+ "-moz-box-shadow:0px 0px 8px rgba(0, 0, 0, .6);"
+	+ "-webkit-box-shadow:0px 02px 8px rgba(0, 0, 0, .6);"
+	+ "-khtml-box-shadow:0px 0px 8px rgba(0, 0, 0, .6);"
+	+ "}"
+
++ '</style>').appendTo("head");
+
+$("body").append(fastFrag.create([
+	getPageLogin(),
+	getPageCameraview(),
+	getPageCameras(),
+	getPageSettingsPicturesizeandquality(),
+	getPageSettingsServerinformation(),
+	getPageSettingsAutodeactivate(),
+	getPageSettingsPicturerefresh(),
+	getPageSettings()
+]));
+
+$(function() {
+	initHtmlElements();
+	hideAllNavbars();
+	showInitNavbar();
+	initPageHandler();
+	actionServerinformation();
+	initSnowmanHtml5CanvasapiInstance();
+});
+</script>
+</body>
+</html>
+
