@@ -20,29 +20,29 @@ function getSnowmanHtml5Canvasapi() {
 			"liveviewLastSeconds" : 0,
 			"liveviewLastMillis" : 0
 		}
-	}
+	};
 
 	snowmanHtml5Canvasapi.debugLog = function(o) {
 		if(snowmanHtml5Canvasapi.bDebugLog) {
 			console.log(o);
 		}
-	}
+	};
 
 	snowmanHtml5Canvasapi.enableDebugLog = function() {
 		snowmanHtml5Canvasapi.bDebugLog = true;
-	}
+	};
 
 	snowmanHtml5Canvasapi.disableDebugLog = function() {
 		snowmanHtml5Canvasapi.bDebugLog = false;
-	}
+	};
 
 	snowmanHtml5Canvasapi.getCanvas = function() {
 		return snowmanHtml5Canvasapi.data.canvas;
-	}
+	};
 
 	snowmanHtml5Canvasapi.setCanvas = function(canvas) {
 		snowmanHtml5Canvasapi.data.canvas = canvas;
-	}
+	};
 
 	/**
 	 * XmlHttpRequest's getAllResponseHeaders() method returns a
@@ -69,7 +69,7 @@ function getSnowmanHtml5Canvasapi() {
 			}
 		}
 		return headers;
-	}
+	};
 
 	snowmanHtml5Canvasapi.initCanvas = function() {
 		canvas = snowmanHtml5Canvasapi.getCanvas();
@@ -88,7 +88,7 @@ function getSnowmanHtml5Canvasapi() {
 			ctx.fillStyle = "black";
 			ctx.strokeRect(0,0,width,height);
 		}
-	}
+	};
 
 	snowmanHtml5Canvasapi.fetchImage = function(name, url, additionalData) {
 		time = new Date();
@@ -111,7 +111,7 @@ function getSnowmanHtml5Canvasapi() {
 			error: snowmanHtml5Canvasapi.errorCb,
 			complete: snowmanHtml5Canvasapi.completeCb
 		});
-	}
+	};
 
 	//TODO: add here a information callback
 /*
@@ -186,20 +186,20 @@ function connect() {
 		} else {
 			snowmanHtml5Canvasapi.debugLog("miss");
 		}
-	}
+	};
 
 	snowmanHtml5Canvasapi.errorCb = function(jqXHR, textStatus, errorThrown) {
 		snowmanHtml5Canvasapi.debugLog("call liveviewErrorCb");
 		snowmanHtml5Canvasapi.debugLog(jqXHR);
 		snowmanHtml5Canvasapi.debugLog(textStatus);
 		snowmanHtml5Canvasapi.debugLog(errorThrown);
-	}
+	};
 
 	snowmanHtml5Canvasapi.completeCb = function(jqXHR, textStatus) {
 		snowmanHtml5Canvasapi.debugLog("call liveviewCompleteCb");
 		snowmanHtml5Canvasapi.debugLog(jqXHR);
 		snowmanHtml5Canvasapi.debugLog(textStatus);
-	}
+	};
 
 	return snowmanHtml5Canvasapi;
 }
