@@ -75,7 +75,8 @@ ffmpegexec=[
     "-c:v",
     "libx264",
     "-preset",
-    "veryfast",
+    #"veryfast",
+    "slow",
     targetFile
 ]
 
