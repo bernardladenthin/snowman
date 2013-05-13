@@ -37,8 +37,8 @@ password="admin"
 cameraname="camera0"
 host="http://example.com/snowman-php-server/cameraupload.php"
 #never put a "/" on the path end
-path="/var/snowman-py-record/"+cameraname+"/pics"
-logFile="/var/snowman-py-record/"+cameraname+"/log.txt"
+path="/var/snowman/"+cameraname+"/pics"
+logFile="/var/snowman/"+cameraname+"/log.txt"
 logLevel=logging.INFO
 
 cameradevice="/dev/video0"

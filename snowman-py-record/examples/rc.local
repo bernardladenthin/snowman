@@ -19,7 +19,7 @@ fi
 
 screen -dmS "snowmanpyrecord"
 sleep 1
-snowmanpyrecordsequence="python /var/snowman-py-record/snowman-py-record.py"
+snowmanpyrecordsequence="python /var/snowman/snowman-py-record.py"
 screen -S "snowmanpyrecord" -p 0 -X exec $snowmanpyrecordsequence
 
 exit 0
