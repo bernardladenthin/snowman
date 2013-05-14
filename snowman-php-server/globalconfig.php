@@ -50,6 +50,15 @@ if(PHP_INT_SIZE < 8) {
 	exit;
 }
 
+if(!checkPHPGDExtension()) {
+	echo "require the php5-gd extension. "
+	."As example "
+	."http://packages.debian.org/de/jessie/php5-gd "
+	."or "
+	."http://packages.ubuntu.com/en/raring/php5-gd";
+	exit;
+}
+
 //TODO: BLCRITICAL: put this in the config with a overwrite flag
 setlocale(LC_TIME, 'German_Germany');
 date_default_timezone_set('Europe/Berlin');

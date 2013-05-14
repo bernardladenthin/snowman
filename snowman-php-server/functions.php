@@ -103,3 +103,10 @@ function getMillisFromMillitime($millitime) {
 	return floor(($millitime - floor($millitime))*$milli);
 }
 
+function checkPHPGDExtension() {
+	if (extension_loaded('gd') && function_exists('imagecreatetruecolor')) {
+		return true;
+	}
+	return false;
+}
+
