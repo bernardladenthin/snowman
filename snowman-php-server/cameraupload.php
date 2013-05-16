@@ -61,7 +61,7 @@ if(
 			 */
 			$posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
 			$camerawriter->createWatermark($posixMillis);
-			$camerawriter->createImageBranding();
+			$camerawriter->createBottomTextBranding();
 			//write the image with original filename from upload
 			//check before write to correct file name
 			$fileinfo = pathinfo($_FILES[$camerauploadFileParameter]['name']);

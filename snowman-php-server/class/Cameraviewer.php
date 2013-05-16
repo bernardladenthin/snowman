@@ -184,10 +184,8 @@ class Cameraviewer {
 		$date .= " [" . $millistring . ']';
 		$date .= " " . date_default_timezone_get();
 
-		$msg =
-			'http://code.google.com/p/snowman-php-server/ '.
-			'| snowman-php-server | '.
-			$date;
+		$msg = $this->getCamera()->getTopTextBranding();
+		$msg .= $date;
 
 		$this->createMessage(
 			$msg,
@@ -199,12 +197,12 @@ class Cameraviewer {
 	}
 
 	/**
-	 * Create a image branding in the cameraviewer image.
-	 * This brand the configurated image branding string in the image.
+	 * Create a bottom text branding in the cameraviewer image.
+	 * This brand the configurated string in the image.
 	 * @return void
 	 */
-	public final function createImageBranding() {
-		$msg = $this->getCamera()->getImageBranding();
+	public final function createBottomTextBranding() {
+		$msg = $this->getCamera()->getBottomTextBranding();
 		$this->createMessage(
 			$msg,
 			0,

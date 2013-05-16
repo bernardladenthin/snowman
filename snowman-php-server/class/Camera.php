@@ -60,10 +60,16 @@ class Camera {
 	private $height;
 
 	/**
-	 * Branding string for camera.
+	 * Top branding string for camera.
 	 * @var string
 	 */
-	private $imagebranding;
+	private $toptextbranding;
+
+	/**
+	 * Bottom branding string for camera.
+	 * @var string
+	 */
+	private $bottomtextbranding;
 
 	/**#@+
 	 * @var array array of strings
@@ -184,7 +190,8 @@ class Camera {
 	 * {@link delay}
 	 * {@link width}
 	 * {@link height}
-	 * {@link imagebranding}
+	 * {@link toptextbranding}
+	 * {@link bottomtextbranding}
 	 * {@link groupallow}
 	 * {@link groupdeny}
 	 * {@link userallow}
@@ -215,7 +222,8 @@ class Camera {
 		$this->delay = intval($stdClass->delay);
 		$this->width = intval($stdClass->width);
 		$this->height = intval($stdClass->height);
-		$this->imagebranding = $stdClass->imagebranding;
+		$this->toptextbranding = $stdClass->toptextbranding;
+		$this->bottomtextbranding = $stdClass->bottomtextbranding;
 
 		if(!is_array($stdClass->groupallow)) {
 			printf('Warning: $groupallow should be an array.');
@@ -327,12 +335,21 @@ class Camera {
 	}
 
 	/**
-	 * Return image branding from a camera.
-	 * @link imagebranding
-	 * @return string imagebranding
+	 * Return top branding string from a camera.
+	 * @link toptextbranding
+	 * @return string toptextbranding
 	 */
-	public final function getImageBranding() {
-		return $this->imagebranding;
+	public final function getTopTextBranding() {
+		return $this->toptextbranding;
+	}
+
+	/**
+	 * Return bottom branding string from a camera.
+	 * @link bottomtextbranding
+	 * @return string bottomtextbranding
+	 */
+	public final function getBottomTextBranding() {
+		return $this->bottomtextbranding;
 	}
 
 	/**

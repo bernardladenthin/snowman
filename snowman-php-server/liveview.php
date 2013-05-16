@@ -49,7 +49,7 @@ if(isset($_REQUEST['name']) && $isloginok) {
 		$filename = $cameraviewer->loadImage();
 		//use a offset of 10 pixels for a view branding
 		$cameraviewer->createWatermark($timeMillis,10);
-		$cameraviewer->createImageBranding();
+		$cameraviewer->createBottomTextBranding();
 
 		header("snowman-timeseconds: " . $posix);
 		header("snowman-timemillis: " . $millis);

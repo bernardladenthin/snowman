@@ -43,6 +43,7 @@
 	"cameras" : [
 		{
 			"name": "camera0",
+			"toptextbranding" : "code.google.com/p/snowman/ | ",
 			"imagebranding": "This is camera zero.",
 			"dir": "camera0_pictures",
 
@@ -78,7 +79,8 @@
 		},
 		{
 			"name": "camera1",
-			"imagebranding": "This is camera one.",
+			"toptextbranding" : "code.google.com/p/snowman/ | ",
+			"bottomtextbranding": "This is camera one.",
 			"dir": "camera1_pictures",
 
 			"refresh": "700",
