@@ -99,8 +99,7 @@ function getPosixFromMillitime($millitime) {
 }
 
 function getMillisFromMillitime($millitime) {
-	$milli = 1000;
-	return floor(($millitime - floor($millitime))*$milli);
+	return substr(floor($millitime), -3);
 }
 
 function checkPHPGDExtension() {
