@@ -60,6 +60,8 @@ if(
 			 * and could have a multuple appearance if the fps > 1
 			 */
 			$posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
+			//Debug the posixMillis value
+			//$camerawriter->getCamera()->writeLog("\$posixMillis: $posixMillis");
 			$camerawriter->createWatermark($posixMillis);
 			$camerawriter->createBottomTextBranding();
 			//write the image with original filename from upload
