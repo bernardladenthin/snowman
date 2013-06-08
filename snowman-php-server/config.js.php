@@ -6,7 +6,7 @@
 		"versiondate": "2013-03-24",
 
 		"owner": "Bernard Ladenthin",
-		"imprinturl": "http:///www.example.com/imprint.html",
+		"imprinturl": "http://www.example.com/imprint.html",
 		"ajaxapiurl": "http://example.com/snowman-php-server/ajaxapi.php",
 		"liveviewurl": "http://example.com/snowman-php-server/liveview.php",
 
