@@ -99,6 +99,12 @@ class Camera {
 	/**#@-*/
 
 	/**
+	 * Prepend path for the tmp path creation.
+	 * @var string
+	 */
+	private $tmpPathPrepend;
+
+	/**
 	 * Path to archive directory.
 	 * @var string
 	 */
@@ -196,6 +202,7 @@ class Camera {
 	 * {@link groupdeny}
 	 * {@link userallow}
 	 * {@link userdeny}
+	 * {@link tmpPathPrepend}
 	 * {@link archiveDir}
 	 * {@link archiveMaxFiles}
 	 * {@link imageExtensions}
@@ -245,6 +252,7 @@ class Camera {
 		}
 		$this->userdeny = $stdClass->userdeny;
 
+		$this->tmpPathPrepend = $stdClass->tmpPathPrepend;
 		$this->archiveDir = $stdClass->archiveDir;
 		$this->archiveMaxFiles = intval($stdClass->archiveMaxFiles);
 
@@ -386,6 +394,15 @@ class Camera {
 	 */
 	public final function getUserDeny() {
 		return $this->userdeny;
+	}
+
+	/**
+	 * Return the prepend path for the tmp path creation.
+	 * @link tmpPathPrepend
+	 * @return string tmp path prepend
+	 */
+	public final function getTmpPathPrepend() {
+		return $this->tmpPathPrepend;
 	}
 
 	/**
@@ -785,7 +802,7 @@ class Camera {
 
 		} else if($this->getArchivePackageFormatCustomExec()) {
 			nis_dir_mkdir($destPath);
-			$tmpPath = $this->getName()."_".floor(millitime());
+			$tmpPath = $this->getTmpPathPrepend().$this->getName()."_".floor(millitime());
 			nis_dir_mkdir($tmpPath);
 
 			foreach($images as $image) {

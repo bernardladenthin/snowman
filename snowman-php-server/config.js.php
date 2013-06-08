@@ -45,7 +45,7 @@
 			"name": "camera0",
 			"toptextbranding" : "code.google.com/p/snowman/ | ",
 			"imagebranding": "This is camera zero.",
-			"dir": "camera0_pictures",
+			"dir": "protected/camera0_pictures",
 
 			"refresh": "700",
 			"delay": "3",
@@ -58,7 +58,8 @@
 			"groupdeny": ["guest"],
 			"groupallow": ["admin", "user"],
 
-			"archiveDir": "camera0_archive",
+			"tmpPathPrepend": "protected/",
+			"archiveDir": "protected/camera0_archive",
 			"archiveDirDate": "Y/m/d/H",
 
 			"archiveMaxFiles": "1500",
@@ -69,7 +70,7 @@
 			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
 			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
 			"archiveImageUnlink" : true,
-			"archiveLogFile" : "log.txt",
+			"archiveLogFile" : "protected/log.txt",
 
 			"imageExtensions": ["jpg", "jpeg"],
 			"imageExtensionsCaseSensitive": false,
@@ -81,7 +82,7 @@
 			"name": "camera1",
 			"toptextbranding" : "code.google.com/p/snowman/ | ",
 			"bottomtextbranding": "This is camera one.",
-			"dir": "camera1_pictures",
+			"dir": "protected/camera1_pictures",
 
 			"refresh": "700",
 			"delay": "3",
@@ -94,7 +95,8 @@
 			"groupdeny": ["guest"],
 			"groupallow": ["admin", "user"],
 
-			"archiveDir": "camera1_archive",
+			"tmpPathPrepend": "protected/",
+			"archiveDir": "protected/camera1_archive",
 			"archiveDirDate": "Y/m/d/H",
 
 			"archiveMaxFiles": "1500",
@@ -105,7 +107,7 @@
 			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
 			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
 			"archiveImageUnlink" : true,
-			"archiveLogFile" : "log.txt",
+			"archiveLogFile" : "protected/log.txt",
 
 			"imageExtensions": ["jpg", "jpeg"],
 			"imageExtensionsCaseSensitive": false,
