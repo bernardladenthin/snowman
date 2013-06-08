@@ -410,7 +410,7 @@ class Camera {
 	 * @link archiveDir
 	 * @return string archive path
 	 */
-	public final function getarchiveDir() {
+	public final function getArchiveDir() {
 		return $this->archiveDir;
 	}
 
@@ -765,7 +765,7 @@ class Camera {
 		$archivedFiles = array();
 		$movedFiles = array();
 		$movedFilesFailed = array();
-		$archiveDir = $this->getarchiveDir();
+		$archiveDir = $this->getArchiveDir();
 
 		// build the optional date path
 		$optionalDatePath = "";
