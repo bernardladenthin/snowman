@@ -13,6 +13,7 @@
 #
 
 #python -m compileall .
+import datetime
 import logging
 import os
 import time
@@ -28,6 +29,7 @@ recordthread=False
 waitNextRecord=False
 timer=False
 logger=False
+ignoreCheckLastModificationTimeOnStartUp=True
 
 waitAfterHang=False
 
@@ -84,6 +86,14 @@ def checkDmesgTimeout():
     count+=int(subprocess.check_output("dmesg | grep -i 'journal commit I/O error' | wc -l", shell=True))
     count+=int(subprocess.check_output("dmesg | grep -i 'EXT4-fs error' | wc -l", shell=True))
     if(count > 0):
+        return True
+    return False
+
+def checkLastModificationTime(path):
+    pathTime = int(os.path.getmtime(path))
+    currentTime = int(time.time())
+    #300sec = 5 min = 60sec*5
+    if((pathTime+300)<currentTime):
         return True
     return False
 
@@ -159,6 +169,14 @@ try:
         if(checkDmesgTimeout()):
             logger.error('checkDmesgTimeout detected, reboot now')
             os.system('reboot')
+            time.sleep(1)
+            sys.exit()
+        if(checkLastModificationTime(path)):
+            if(ignoreCheckLastModificationTimeOnStartUp==False):
+                logger.error('checkLastModificationTime detected, reboot now')
+                os.system('reboot')
+                time.sleep(1)
+                sys.exit()
         if(waitAfterHang):
             try:
                 logger.debug('now sleep ..')
@@ -172,6 +190,9 @@ try:
             clearOutOfTimeCallback();
             registerOutOfTimeCallback(int(recordTime)+30);
             record(fps, cameraname, path, recordTime, resolution, cameradevice)
+            if(ignoreCheckLastModificationTimeOnStartUp==True):
+                ignoreCheckLastModificationTimeOnStartUp=False
+                time.sleep(5)
 
     time.sleep(2)
 except KeyboardInterrupt:
