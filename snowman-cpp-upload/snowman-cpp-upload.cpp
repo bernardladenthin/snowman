@@ -36,6 +36,13 @@
 using namespace std;
 using namespace boost;
 
+// e.g. to output a vector<string>
+template<class T>
+ostream& operator<<(ostream& os, const vector<T>& v) {
+	copy(v.begin(), v.end(), ostream_iterator<T>(cout, " "));
+	return os;
+}
+
 static string requestCameraimage;
 static string requestUsername;
 static string requestPassword;
@@ -91,6 +98,7 @@ void printLicense() {
 cout
 <<endl
 <<" snowman-cpp-upload - High performance upload tool to upload images"
+<<endl
 <<" on a snowman-php-server."
 <<endl
 <<" Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>"
@@ -835,13 +843,6 @@ void getAvailableFileVector(
 
 }
 
-// e.g. to output a vector<string>
-template<class T>
-ostream& operator<<(ostream& os, const vector<T>& v) {
-	copy(v.begin(), v.end(), ostream_iterator<T>(cout, " ")); 
-	return os;
-}
-
 int main(int argc, char * argv[]) {
 	printVersion();
 
@@ -942,7 +943,7 @@ int main(int argc, char * argv[]) {
 			"sleep-time,s",
 			program_options::value<unsigned>(),
 			"Mikro seconds of main loop. "
-				"Calculate like (1/fps)*1000000 . Default is 5fps [500000]."
+				"Calculate like (0.5s)*1000000. Default is 0.5s (2Hz) [500000]."
 		)
 		(
 			"username,u",
