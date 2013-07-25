@@ -28,7 +28,7 @@
  * @param array $entries an array of strings
  */
 function removeDotFiles($entries) {
-	return array_slice($entries, 2);
+	return array_diff($entries, array('.', '..'));
 }
 
 /**
