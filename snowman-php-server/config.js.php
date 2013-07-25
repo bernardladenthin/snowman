@@ -44,14 +44,14 @@
 		{
 			"name": "camera0",
 			"toptextbranding" : "code.google.com/p/snowman/ | ",
-			"imagebranding": "This is camera zero.",
+			"bottomtextbranding": "This is camera zero.",
 			"dir": "protected/camera0_pictures",
 
 			"refresh": "700",
 			"delay": "3",
 
 			"width": "640",
-			"height": "480",
+			"height": "360",
 
 			"userdeny": [],
 			"userallow": [],
@@ -62,11 +62,11 @@
 			"archiveDir": "protected/camera0_archive",
 			"archiveDirDate": "Y/m/d/H",
 
-			"archiveMaxFiles": "1500",
+			"archiveMaxFiles": "5000",
 			"archivePackageFormatZip" : false,
 			"archivePackageFormatZipName" : "_Ymd_H_i_s",
 			"archivePackageFormatCustomExec" :
-"snowman-py-ffmpeg.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
+"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
 			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
 			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
 			"archiveImageUnlink" : true,
@@ -88,7 +88,7 @@
 			"delay": "3",
 
 			"width": "640",
-			"height": "480",
+			"height": "360",
 
 			"userdeny": [],
 			"userallow": [],
@@ -99,11 +99,11 @@
 			"archiveDir": "protected/camera1_archive",
 			"archiveDirDate": "Y/m/d/H",
 
-			"archiveMaxFiles": "1500",
+			"archiveMaxFiles": "5000",
 			"archivePackageFormatZip" : false,
 			"archivePackageFormatZipName" : "_Ymd_H_i_s",
 			"archivePackageFormatCustomExec" :
-"snowman-py-ffmpeg.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
+"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
 			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
 			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
 			"archiveImageUnlink" : true,
