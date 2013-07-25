@@ -12,6 +12,10 @@ Mirror on popular platforms.
 PHP script to run a snowman server.
   * Code license: [GNU Affero General Public License (AGPL)](http://www.gnu.org/licenses/agpl-3.0.html)
 
+##snowman-cpp-recordwatchdog
+High performance watchdog to detect a hanging snowman-py-record script.
+  * Code license: [GNU General Public License (GPL) Version 3](http://www.gnu.org/licenses/gpl-3.0.html)
+
 ##snowman-cpp-upload
 High performance upload tool to upload images on a snowman-php-server.
   * Code license: [GNU General Public License (GPL) Version 3](http://www.gnu.org/licenses/gpl-3.0.html)
