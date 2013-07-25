@@ -29,7 +29,6 @@ recordthread=False
 waitNextRecord=False
 timer=False
 logger=False
-ignoreCheckLastModificationTimeOnStartUp=True
 
 waitAfterHang=False
 
@@ -67,35 +66,34 @@ resolution="640x360"
 
 mkdirexec=['mkdir', '-p', path]
 
+def getScreenCreateExecByName(screenname, execArray):
+    arguments=["screen", "-S", screenname, "-p", "0", "-X", "exec"]
+    arguments.extend(execArray)
+    return arguments
+
+def getScreenKillExecByName(screenname):
+    return ["screen", "-S", screenname, "-X", "quit"]
+
 snowmanCppUploadArg=["snowman-cpp-upload", "-u", username, "-p", password, "-c",
     cameraname, "-h", host, "--path", path, "-t", "2", "-d", "0"]
 
 screenname="\"screen-snowman-cpp-upload\""
-screeenexec=["screen", "-S", screenname, "-p", "0", "-X", "exec"]
-killscreen=["screen", "-S", screenname, "-X", "quit"]
-screeenexec.extend(snowmanCppUploadArg)
+screeenexec=getScreenCreateExecByName(screenname, snowmanCppUploadArg)
+
+killscreen=getScreenKillExecByName(screenname)
+
 ntpdateExec=["sntp", "pool.ntp.org"]
 
-#to test
-#echo "mmc0: Timeout waiting for hardware interrupt" >> /dev/kmsg
-def checkDmesgTimeout():
-    count=0
-    count+=int(subprocess.check_output("dmesg | grep -i 'mmc0: Timeout waiting for hardware interrupt' | wc -l", shell=True))
-    count+=int(subprocess.check_output("dmesg | grep -i 'mmcblk0: error' | wc -l", shell=True))
-    count+=int(subprocess.check_output("dmesg | grep -i 'USB disconnect' | wc -l", shell=True))
-    count+=int(subprocess.check_output("dmesg | grep -i 'journal commit I/O error' | wc -l", shell=True))
-    count+=int(subprocess.check_output("dmesg | grep -i 'EXT4-fs error' | wc -l", shell=True))
-    if(count > 0):
-        return True
-    return False
+def createAndDeleteFileForWatchdog(path):
+    fooFilePath=path+os.sep+'foo';
+    open(fooFilePath, 'w').close();
+    os.remove(fooFilePath);
 
-def checkLastModificationTime(path):
-    pathTime = int(os.path.getmtime(path))
-    currentTime = int(time.time())
-    #300sec = 5 min = 60sec*5
-    if((pathTime+300)<currentTime):
-        return True
-    return False
+def createWatchdog(pathToMonitor):
+    watchdogScreenname="\"screen-snowman-cpp-recordwatchdog_"+cameraname+"\""
+    watchdogArg=["snowman-cpp-recordwatchdog", "--pathToMonitor" , pathToMonitor]
+    watchdogScreeenexec=getScreenCreateExecByName(watchdogScreenname, watchdogArg)
+    call(watchdogScreeenexec)
 
 def killProgram():
     global recordthread
@@ -152,6 +150,8 @@ def record(fps, cameraname, path, recordTime, resolution, cameradevice):
 
 try:
     call(mkdirexec)
+    createAndDeleteFileForWatchdog(path)
+    createWatchdog(path)
     logger = logging.getLogger('myapp')
     hdlr = logging.FileHandler(logFile)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
@@ -166,17 +166,6 @@ try:
     time.sleep(2)
     call(screeenexec)
     while True:
-        if(checkDmesgTimeout()):
-            logger.error('checkDmesgTimeout detected, reboot now')
-            os.system('reboot')
-            time.sleep(1)
-            sys.exit()
-        if(checkLastModificationTime(path)):
-            if(ignoreCheckLastModificationTimeOnStartUp==False):
-                logger.error('checkLastModificationTime detected, reboot now')
-                os.system('reboot')
-                time.sleep(1)
-                sys.exit()
         if(waitAfterHang):
             try:
                 logger.debug('now sleep ..')
@@ -190,9 +179,6 @@ try:
             clearOutOfTimeCallback();
             registerOutOfTimeCallback(int(recordTime)+30);
             record(fps, cameraname, path, recordTime, resolution, cameradevice)
-            if(ignoreCheckLastModificationTimeOnStartUp==True):
-                ignoreCheckLastModificationTimeOnStartUp=False
-                time.sleep(5)
 
     time.sleep(2)
 except KeyboardInterrupt:
