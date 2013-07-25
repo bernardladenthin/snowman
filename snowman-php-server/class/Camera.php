@@ -566,7 +566,6 @@ class Camera {
 
 	/**
 	 * Return all images from a camera.
-	 * @todo asort() could be replaced by array_reverse?
 	 * @param $maxFiles
 	 * @return mixed return an array of images if success, otherwise false
 	 */
@@ -626,18 +625,17 @@ class Camera {
 	 * @param integer $maxFiles
 	 * @return mixed return array of strings if success, otherwise false
 	 */
-	private final function getImages($delay=true, $maxFiles) {
-		$images = $this->getImagesAll($maxFiles);
-		if($delay) {
-			$iterate = $this->getDelay();
+	private final function getImages($delay=true) {
+		$images = $this->getImagesAll(
+			$this->getMaximumFilesystemFileArray()
+		);
 
-			if(count($images) < $iterate) {
+		if($delay) {
+			if(count($images) < $this->getDelay()) {
 				return false;
 			}
 
-			while(($iterate--)!=false) {
-				array_pop($images);
-			}
+			$images = array_slice($images, 0, -$this->getDelay());
 		}
 		return $images;
 	}
@@ -648,10 +646,7 @@ class Camera {
 	 * @return string return image path if success, otherwise false
 	 */
 	public final function getImagesLast($delay=true) {
-		$images = $this->getImages(
-			$delay,
-			$this->getMaximumFilesystemFileArray()
-		);
+		$images = $this->getImages($delay);
 
 		if(is_array($images)) {
 			return array_pop($images);
@@ -752,7 +747,8 @@ class Camera {
 	 * @return string return the log string
 	 */
 	public final function createArchive($delay=true) {
-		$images = $this->getImages($delay, $this->getArchiveMaxFiles());
+		$images = $this->getImages($delay);
+		$images = array_slice($images, $this->getArchiveMaxFiles());
 
 		$logmsg = "\"".$this->getName()."\": ";
 		if(!is_array($images) || count($images) <= 0) {
