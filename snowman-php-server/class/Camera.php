@@ -631,8 +631,8 @@ class Camera {
 		);
 
 		if($delay) {
-			if(count($images) < $this->getDelay()) {
-				return false;
+			if(count($images) <= $this->getDelay()) {
+				return null;
 			}
 
 			$images = array_slice($images, 0, -$this->getDelay());
@@ -652,7 +652,7 @@ class Camera {
 			return array_pop($images);
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -748,7 +748,6 @@ class Camera {
 	 */
 	public final function createArchive($delay=true) {
 		$images = $this->getImages($delay);
-		$images = array_slice($images, $this->getArchiveMaxFiles());
 
 		$logmsg = "\"".$this->getName()."\": ";
 		if(!is_array($images) || count($images) <= 0) {
@@ -756,6 +755,10 @@ class Camera {
 			$this->writeLog($logmsg);
 			return $logmsg;
 		}
+
+		$logmsg .= "slice image array from: ".count($images). " to ";
+		$images = array_slice($images, $this->getArchiveMaxFiles());
+		$logmsg .= count($images). "; ";
 
 		$zipArchive = false;
 		$archivedFiles = array();
