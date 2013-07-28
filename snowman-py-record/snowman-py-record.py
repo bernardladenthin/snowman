@@ -45,16 +45,16 @@ logLevel=logging.INFO
 cameradevice="/dev/video0"
 
 #Logitech C525 optimal
-#fps="25"
-#resolution="1280x720"
+fps="5"
+resolution="1280x720"
 
 #Logitech C525 average
 #fps="2"
 #resolution="640x360"
 
 #Logitech C525 minimal 0
-fps="1"
-resolution="640x360"
+#fps="1"
+#resolution="640x360"
 
 #Logitech C525 minimal 1
 #fps="1"
