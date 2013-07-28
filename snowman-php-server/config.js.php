@@ -6,9 +6,9 @@
 		"versiondate": "2013-03-24",
 
 		"owner": "Bernard Ladenthin",
-		"imprinturl": "http://www.example.com/imprint.html",
-		"ajaxapiurl": "http://example.com/snowman-php-server/ajaxapi.php",
-		"liveviewurl": "http://example.com/snowman-php-server/liveview.php",
+		"imprinturl": "http://localhost/imprint.html",
+		"ajaxapiurl": "http://localhost/snowman-php-server/ajaxapi.php",
+		"liveviewurl": "http://localhost/snowman-php-server/liveview.php",
 
 		"archiveOnlyFromSecureHost" : false,
 		"archiveOnlyAccessableCameras" : false,
