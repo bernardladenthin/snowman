@@ -75,8 +75,8 @@ avconvexec=[
     "-c:v",
     "libx264",
     "-preset",
-    #"veryfast",
-    "slow",
+    "veryfast",
+    #"slow",
     targetFile
 ]
 
