@@ -32,6 +32,7 @@ static bool run;
 
 void printLicense();
 void printVersion();
+bool isSnomanVideoConvertRunning();
 
 void signalCallbackHandler(
 	int signum
@@ -84,6 +85,34 @@ void signalCallbackHandler(
 		cout << "Caught signal: "<<signum<<endl<<flush;
 	}
 	run = false;
+}
+
+bool isSnomanVideoConvertRunning() {
+
+	string command = "/bin/ps ax";
+	string output;
+	FILE *in;
+	char buff[2048];
+	if(!(in = popen(command.c_str(), "r"))) {
+		return false;
+	}
+
+	while(fgets(buff, sizeof(buff), in)!=NULL) {
+		output.append(buff);
+	}
+
+	string snowmanPyAvconv("snowman-py-avconv");
+	string snowmanPyFfmpeg("snowman-py-ffmpeg");
+
+	if (string::npos != output.find(snowmanPyAvconv)) {
+		return true;
+	}
+
+	if (string::npos != output.find(snowmanPyFfmpeg)) {
+		return true;
+	}
+
+	return false;
 }
 
 int main(int argc, char * argv[]) {
@@ -262,6 +291,26 @@ int main(int argc, char * argv[]) {
 				cout
 				<<"main loop: "
 				<<"seconds > timeHanging: restart operating system"
+				<<endl
+				<<flush;
+			}
+
+			if(isSnomanVideoConvertRunning()) {
+				if(debug) {
+					cout
+					<<"main loop: "
+					<<"isSnomanVideoConvertRunning == true; "
+					<<"Continue to wait for the completion"
+					<<endl
+					<<flush;
+				}
+				continue;
+			}
+
+			if(debug) {
+				cout
+				<<"main loop: "
+				<<"restart operating system"
 				<<endl
 				<<flush;
 			}
