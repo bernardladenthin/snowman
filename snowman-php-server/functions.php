@@ -32,6 +32,35 @@ function removeDotFiles($entries) {
 }
 
 /**
+ * Return true if the filename equals "." or ".."
+ * @param boolean true if the file is an dotfile
+ */
+function isDotFile($filename) {
+	return ($filename != "." && $filename != "..") ? false : true;
+}
+
+/**
+ * Return true if the needle is in the array. This function is not case sensitive.
+ * @param boolean true if the needle is in the haystack.
+ */
+function in_arrayi($needle, $haystack) {
+	return in_array(strtolower($needle), array_change_key_case($haystack));
+}
+
+/**
+ * Return true if the array contains an array.
+ * @param boolean true if the array contains an array.
+ */
+function contains_array($array){
+	foreach($array as $value){
+		if(is_array($value)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
  * Create the dir recursive if not exist.
  * @param string $path the directory path
  */

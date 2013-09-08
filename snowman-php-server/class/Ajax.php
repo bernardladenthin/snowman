@@ -98,6 +98,9 @@ class Ajax {
 			$this->requestNodeCommand($this->JSONResquest->command);
 		}
 
+		if(isset($this->JSONResquest->getArchiveListing)) {
+			$this->requestNodeGetArchiveListing($this->JSONResquest->getArchiveListing);
+		}
 	}
 
 	/**
@@ -151,6 +154,36 @@ class Ajax {
 			} else {
 				$this->snowmanresponse->command->refreshchmod->success = false;
 			}
+		}
+
+	}
+
+	/**
+	 * Parse getArchiveListing node.
+	 * @return void
+	 */
+	private final function requestNodeGetArchiveListing($node) {
+		global $isloginok;
+		$this->snowmanresponse->archiveListing = new StdClass();
+
+		if($isloginok) {
+			$this->snowmanresponse->archiveListing = array();
+
+			$accessgrantedcameras = camera::getAccessableCamerasByUser(
+				$this->snowman->getCameras(),
+				$this->snowman->getLoginUser()
+			);
+
+			foreach($accessgrantedcameras as $camera) {
+				$archiveListing = $camera->getArchiveListing();
+				//array_multisort($archiveListing);
+
+				$this->snowmanresponse->archiveListing[$camera->getName()] =
+					$archiveListing;
+			}
+
+		} else {
+			$this->snowmanresponse->archiveListing = false;
 		}
 
 	}

@@ -189,6 +189,18 @@ class Camera {
 	private $archiveLogFile;
 
 	/**
+	 * The file extension for a archive file.
+	 * @var array
+	 */
+	private $archiveExtensions;
+
+	/**
+	 * Check the file extension in case sensitive mode.
+	 * @var boolean
+	 */
+	private $archiveExtensionsCaseSensitive;
+
+	/**
 	 * Eanble the raw log for a cameraupload request.
 	 * @var boolean
 	 */
@@ -223,6 +235,8 @@ class Camera {
 	 * {@link archiveDirDate}
 	 * {@link archiveImageUnlink}
 	 * {@link archiveLogFile}
+	 * {@link archiveExtensions}
+	 * {@link archiveExtensionsCaseSensitive}
 	 * {@link logRawCameraUpload}
 	 * @param StdClass $camera
 	 * @return void
@@ -293,6 +307,8 @@ class Camera {
 		$this->archiveDirDate = $stdClass->archiveDirDate;
 		$this->archiveImageUnlink = $stdClass->archiveImageUnlink;
 		$this->archiveLogFile = $stdClass->archiveLogFile;
+		$this->archiveExtensions = $stdClass->archiveExtensions;
+		$this->archiveExtensionsCaseSensitive = $stdClass->archiveExtensionsCaseSensitive;
 		$this->logRawCameraUpload = $stdClass->logRawCameraUpload;
 	}
 
@@ -504,6 +520,24 @@ class Camera {
 	}
 
 	/**
+	 * Return the file extensions from a archive file.
+	 * @link archiveExtensions
+	 * @return array return an array of of strings for file extensions
+	 */
+	public final function getArchiveExtensions() {
+		return $this->archiveExtensions;
+	}
+
+	/**
+	 * Getter for <code>$archiveExtensionsCaseSensitive</code>.
+	 * @link archiveExtensionsCaseSensitive
+	 * @return boolean
+	 */
+	public final function getArchiveExtensionsCaseSensitive() {
+		return $this->archiveExtensionsCaseSensitive;
+	}
+
+	/**
 	 * Getter for <code>$logRawCameraUpload</code>.
 	 * @link logRawCameraUpload
 	 * @return boolean
@@ -608,18 +642,24 @@ class Camera {
 
 					$extension = $fileinfo['extension'];
 					$extensions = $this->getImageExtensions();
+					$isValidExtension = false;
 
-					if(!$this->getImageExtensionsCaseSensitive()) {
-						$extension = strtoupper($extension);
-						$extensions = array_change_key_case($extensions, CASE_UPPER);
+					if($this->getImageExtensionsCaseSensitive()) {
+						if(in_array($extension, $extensions)) {
+							$isValidExtension = true;
+						}
+					} else {
+						if(in_arrayi($extension, $extensions)) {
+							$isValidExtension = true;
+						}
 					}
 
-					if(in_array($extension, $extensions)) {
+					if($isValidExtension) {
 						$path =
 							$fileinfo['dirname'].
 							DIRECTORY_SEPARATOR.
 							$fileinfo['basename'];
-						if(is_readable($path)){
+						if(is_readable($path)) {
 							$imagesall[] = $path;
 						}
 					}
@@ -868,5 +908,69 @@ class Camera {
 		$this->writeLog($logmsg);
 		return $logmsg;
 	}
+
+	/**
+	 * Get a listing of all archived files.
+	 * @param boolean $delay if true,
+	 * the internal {@link $delay} of images is used.
+	 * @return string return the log string
+	 */
+	public final function getArchiveListing($dir=null) {
+		if($dir == null) {
+			$dir = $this->getArchiveDir();
+		}
+
+		$listDir = array();
+		if($handler = opendir($dir)) {
+			while (($sub = readdir($handler)) !== FALSE) {
+				if (!isDotFile($sub)) {
+					$path = $dir.DIRECTORY_SEPARATOR.$sub;
+
+					if(is_file($path)) {
+						$fileinfo = pathinfo(
+							$path
+						);
+
+						if( isset($fileinfo['extension']) ) {
+
+							$extension = $fileinfo['extension'];
+							$extensions = $this->getArchiveExtensions();
+							$isValidExtension = false;
+
+							if($this->getArchiveExtensionsCaseSensitive()) {
+								if(in_array($extension, $extensions)) {
+									$isValidExtension = true;
+								}
+							} else {
+								if(in_arrayi($extension, $extensions)) {
+									$isValidExtension = true;
+								}
+							}
+
+							if($isValidExtension) {
+									$listDir[] = $sub;
+							}
+
+						}
+
+					} else if(is_dir($path)) {
+						$listDir[$sub] = $this->getArchiveListing($path);
+					}
+				}
+			}
+			closedir($handler);
+		}
+
+		if(contains_array($listDir)) {
+			//sort directories
+			ksort($listDir);
+		} else {
+			//sort the filenames
+			sort($listDir);
+		}
+
+		return $listDir;
+	}
+
 }
 

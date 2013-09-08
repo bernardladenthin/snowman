@@ -72,6 +72,9 @@
 			"archiveImageUnlink" : true,
 			"archiveLogFile" : "protected/log.txt",
 
+			"archiveExtensions": ["mp4"],
+			"archiveExtensionsCaseSensitive": false,
+
 			"imageExtensions": ["jpg", "jpeg"],
 			"imageExtensionsCaseSensitive": false,
 
@@ -109,6 +112,9 @@
 			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
 			"archiveImageUnlink" : true,
 			"archiveLogFile" : "protected/log.txt",
+
+			"archiveExtensions": ["mp4"],
+			"archiveExtensionsCaseSensitive": false,
 
 			"imageExtensions": ["jpg", "jpeg"],
 			"imageExtensionsCaseSensitive": false,
