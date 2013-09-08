@@ -613,7 +613,7 @@ class Camera {
 
 				}
 			}
-			asort($imagesall);
+			sort($imagesall);
 		}
 
 		return $imagesall;
