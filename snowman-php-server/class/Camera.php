@@ -757,7 +757,7 @@ class Camera {
 		}
 
 		$logmsg .= "slice image array from: ".count($images). " to ";
-		$images = array_slice($images, $this->getArchiveMaxFiles());
+		$images = array_slice($images, 0, $this->getArchiveMaxFiles());
 		$logmsg .= count($images). "; ";
 
 		$zipArchive = false;
