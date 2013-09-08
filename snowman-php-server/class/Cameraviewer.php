@@ -169,7 +169,7 @@ class Cameraviewer {
 	 * @param integer $POSIXMillis a optional given timestamp e.g.
 	 * for upload, unit [ms]
 	 * @param integer $yOffset a horizontal offset for the message
-	 * @return void
+	 * @return string the watermark string
 	 */
 	public final function createWatermark($POSIXMillis=false, $yOffset=0) {
 		if(!$POSIXMillis) {
@@ -194,6 +194,7 @@ class Cameraviewer {
 			$this->getCamera()->getWidth(),
 			10+$yOffset
 		);
+		return $msg;
 	}
 
 	/**
