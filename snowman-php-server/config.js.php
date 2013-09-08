@@ -48,10 +48,10 @@
 			"dir": "protected/camera0_pictures",
 
 			"refresh": "700",
-			"delay": "6",
+			"delay": "15",
 
-			"width": "1280",
-			"height": "720",
+			"width": "640",
+			"height": "360",
 
 			"userdeny": [],
 			"userallow": [],

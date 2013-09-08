@@ -36,7 +36,7 @@ recordTime="180"
 username="admin"
 password="admin"
 cameraname="camera0"
-host="http://example.com/snowman-php-server/cameraupload.php"
+host="http://localhost/snowman-php-server/cameraupload.php"
 #never put a "/" on the path end
 path="/var/snowman/"+cameraname+"/pics"
 logFile="/var/snowman/"+cameraname+"/log.txt"
@@ -44,9 +44,13 @@ logLevel=logging.INFO
 
 cameradevice="/dev/video0"
 
+#Logitech C525 and zotac ID13/ID17
+fps="8"
+resolution="640x360"
+
 #Logitech C525 optimal
-fps="5"
-resolution="1280x720"
+#fps="5"
+#resolution="1280x720"
 
 #Logitech C525 average
 #fps="2"
@@ -75,7 +79,7 @@ def getScreenKillExecByName(screenname):
     return ["screen", "-S", screenname, "-X", "quit"]
 
 snowmanCppUploadArg=["snowman-cpp-upload", "-u", username, "-p", password, "-c",
-    cameraname, "-h", host, "--path", path, "-t", "2", "-d", "0"]
+    cameraname, "-h", host, "--path", path, "-t", "12", "-d", "0"]
 
 screenname="\"screen-snowman-cpp-upload\""
 screeenexec=getScreenCreateExecByName(screenname, snowmanCppUploadArg)
