@@ -62,7 +62,7 @@
 			"archiveDir": "protected/camera0_archive",
 			"archiveDirDate": "Y/m/d/H",
 
-			"archiveMaxFiles": "5000",
+			"archiveMaxFiles": 5000,
 			"archivePackageFormatZip" : false,
 			"archivePackageFormatZipName" : "_Ymd_H_i_s",
 			"archivePackageFormatCustomExec" :
@@ -99,7 +99,7 @@
 			"archiveDir": "protected/camera1_archive",
 			"archiveDirDate": "Y/m/d/H",
 
-			"archiveMaxFiles": "5000",
+			"archiveMaxFiles": 5000,
 			"archivePackageFormatZip" : false,
 			"archivePackageFormatZipName" : "_Ymd_H_i_s",
 			"archivePackageFormatCustomExec" :
