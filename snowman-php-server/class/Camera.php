@@ -189,6 +189,12 @@ class Camera {
 	private $archiveLogFile;
 
 	/**
+	 * Eanble the raw log for a cameraupload request.
+	 * @var boolean
+	 */
+	private $logRawCameraUpload;
+
+	/**
 	 * Constructor
 	 * {@link name}
 	 * {@link dir}
@@ -217,6 +223,7 @@ class Camera {
 	 * {@link archiveDirDate}
 	 * {@link archiveImageUnlink}
 	 * {@link archiveLogFile}
+	 * {@link logRawCameraUpload}
 	 * @param StdClass $camera
 	 * @return void
 	 */
@@ -286,6 +293,7 @@ class Camera {
 		$this->archiveDirDate = $stdClass->archiveDirDate;
 		$this->archiveImageUnlink = $stdClass->archiveImageUnlink;
 		$this->archiveLogFile = $stdClass->archiveLogFile;
+		$this->logRawCameraUpload = $stdClass->logRawCameraUpload;
 	}
 
 	/**
@@ -493,6 +501,15 @@ class Camera {
 	 */
 	public final function getArchiveLogFile() {
 		return $this->archiveLogFile;
+	}
+
+	/**
+	 * Getter for <code>$logRawCameraUpload</code>.
+	 * @link logRawCameraUpload
+	 * @return boolean
+	 */
+	public final function getLogRawCameraUpload() {
+		return $this->logRawCameraUpload;
 	}
 
 	/**

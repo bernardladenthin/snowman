@@ -76,7 +76,8 @@
 			"imageExtensionsCaseSensitive": false,
 
 			"camerawriterFormatPosixMillis" : true,
-			"maximumFilesystemFileArray" : 9999
+			"maximumFilesystemFileArray" : 9999,
+			"logRawCameraUpload" : false
 		},
 		{
 			"name": "camera1",
@@ -113,7 +114,8 @@
 			"imageExtensionsCaseSensitive": false,
 
 			"camerawriterFormatPosixMillis" : true,
-			"maximumFilesystemFileArray" : 9999
+			"maximumFilesystemFileArray" : 9999,
+			"logRawCameraUpload" : false
 		}
 	]
 }

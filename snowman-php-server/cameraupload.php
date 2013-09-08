@@ -53,6 +53,10 @@ if(
 			$_FILES[$camerauploadFileParameter]['name']
 		);
 
+		if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+			$logmsg = "Uploaded\nRAW request: ".$_FILES[$camerauploadFileParameter]['name'].";";
+		}
+
 		if(is_array($form)) {
 			/**
 			 * The upload format tells us only the begin, the fps an the
@@ -60,9 +64,17 @@ if(
 			 * and could have a multuple appearance if the fps > 1
 			 */
 			$posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
-			//Debug the posixMillis value
-			//$camerawriter->getCamera()->writeLog("\$posixMillis: $posixMillis");
-			$camerawriter->createWatermark($posixMillis);
+
+			if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+				$logmsg .= "\nposixMillis: $posixMillis";
+			}
+
+			$watermarkMsg = $camerawriter->createWatermark($posixMillis);
+
+			if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+				$logmsg .= "\nwatermarkMsg: $watermarkMsg\n\n";
+			}
+
 			$camerawriter->createBottomTextBranding();
 			//write the image with original filename from upload
 			//check before write to correct file name
@@ -88,6 +100,11 @@ if(
 				}
 
 				$success = $camerawriter->writeToFile($filename);
+
+
+				if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+					$camerawriter->getCamera()->writeLog($logmsg);
+				}
 
 				if($success) {
 					unset($camerawriter);
