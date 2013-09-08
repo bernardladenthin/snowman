@@ -611,11 +611,7 @@ class Camera {
 
 					if(!$this->getImageExtensionsCaseSensitive()) {
 						$extension = strtoupper($extension);
-						$extensionsUpper = array();
-						foreach($extensions as $e) {
-							$extensionsUpper[] = strtoupper($e);
-						}
-						$extensions = $extensionsUpper;
+						$extensions = array_change_key_case($extensions, CASE_UPPER);
 					}
 
 					if(in_array($extension, $extensions)) {
