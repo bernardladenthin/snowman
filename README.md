@@ -24,6 +24,16 @@ High performance upload tool to upload images on a snowman-php-server.
 HTML5 application to connect to the snowman-php-server.
   * Code license: [GNU General Public License (GPL) Version 3](http://www.gnu.org/licenses/gpl-3.0.html)
 
+###Library licenses
+Some libraries have their own licenses:
+  * jQuery: [MIT License](http://www.opensource.org/licenses/mit-license.php)
+  * jQuery Mobile: [MIT License](http://www.opensource.org/licenses/mit-license.php)
+  * jquery.json-2.4.min.js: [MIT License](http://www.opensource.org/licenses/mit-license.php)
+  * jquery.jstree.js: [MIT License](http://www.opensource.org/licenses/mit-license.php)
+  * fastFrag.min.js: [unlicense](http://unlicense.org)
+  * json2.min.js: Public Domain
+  * snowman-html5-canvasapi-1.0.0.min.js: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 ##snowman-html5-canvasapi
 HTML5 canvas api for snowman.
   * Code license: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
