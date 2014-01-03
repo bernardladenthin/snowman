@@ -3,7 +3,7 @@
 VERSION = 0.1
 CC      = /usr/bin/g++
 CFLAGS  = --std=c++0x -Wall -Wextra -pedantic-errors -ggdb -DVERSION=\"$(VERSION)\" -D _POSIX_C_SOURCE=200809L
-LDFLAGS = -lboost_thread-mt -lboost_program_options -lm -pthread
+LDFLAGS = -lboost_system -lboost_thread -lboost_program_options -lm -pthread
 
 OBJ = snowman-cpp-recordwatchdog.o
 prefix=/usr
