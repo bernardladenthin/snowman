@@ -2,7 +2,7 @@
  * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+function getListElementsFromArray(elements) {
+	o = [
+	];
+	for (var i = 0; i < elements.length; i++ ) {
+		o.push(
+			{
+				"content" : elements[i],
+				"type" : "li"
+			}
+		);
+	}
+	return o;
+}
+
+function getAjaxLoaderImg() {
+	o =
+	{
+		"attrs": {
+			"alt": "ajaxloader",
+			"src": "./img/ajaxloader.gif",
+		},
+		"type": "img",
+		"css" : htmlDef.img.miniajaxloader.cl
+	}
+	return o;
+}
+
+function createListingTreeRoot() {
+	o =
+	{
+		"id": htmlDef.page.cameras.content.archiveListingTree.id,
+		"type": "div"
+	}
+	return o;
+}
 
 function getNavbar() {
 	o =
@@ -291,7 +327,6 @@ function getPageCameraview() {
 	o =
 	{
 		"attrs": {
-			"data-add-back-btn": "true",
 			"data-role": "page"
 		},
 		"content": [
@@ -314,7 +349,7 @@ function getPageCameraview() {
 							"text": "Play"
 						},
 						"css": "ui-btn-right",
-						"id": "liveviewplaybtn",
+						"id": htmlDef.page.cameras.content.liveviewplaybtn.id,
 						"type": "a"
 					},
 					{
@@ -327,7 +362,7 @@ function getPageCameraview() {
 							"text": "Pause"
 						},
 						"css": "ui-btn-right",
-						"id": "liveviewpausebtn",
+						"id": htmlDef.page.cameras.content.liveviewpausebtn.id,
 						"type": "a"
 					}
 				]
@@ -389,6 +424,33 @@ function getPageCameras(){
 					},
 					{
 						"type": "br"
+					},
+					{
+						"id" : htmlDef.page.cameras.content.archiveListingCollapsible.id,
+						"attrs": {
+							"data-content-theme": "a",
+							"data-role": "collapsible",
+							"data-theme": "a"
+						},
+						"content": [
+							{
+								"content": {
+									"text": "Archive listing"
+								},
+								"type": "h3"
+							},
+							{
+								"attrs": {
+									"data-role": "fieldcontain"
+								},
+								"content": [
+									{
+										"id" : htmlDef.page.cameras.content.archiveListing.id,
+										"type": "div"
+									}
+								]
+							}
+						]
 					},
 					{
 						"attrs": {
@@ -524,7 +586,6 @@ function getPageSettingsPicturesizeandquality() {
 	o =
 	{
 		"attrs": {
-			"data-add-back-btn": "true",
 			"data-role": "page"
 		},
 		"content": [
@@ -555,7 +616,7 @@ function getPageSettingsPicturesizeandquality() {
 }
 
 function getLabelForFieldset(text,id) {
-	o = 
+	o =
 	{
 		"attrs": {
 			"for": id
@@ -569,7 +630,7 @@ function getLabelForFieldset(text,id) {
 }
 
 function getInputForFieldset(id) {
-	o = 
+	o =
 	{
 		"attrs": {
 			"name": id,
@@ -587,7 +648,6 @@ function getPageSettingsServerinformation() {
 	o =
 	{
 		"attrs": {
-			"data-add-back-btn": "true",
 			"data-role": "page"
 		},
 		"content": [
@@ -652,7 +712,15 @@ function getPageSettingsServerinformation() {
 							"type": "br"
 						},
 						getLabelForFieldset("Liveview-URL:",htmlDef.page.settingsServerinformation.content.ServerinformationServerLiveviewUrl.id),
-						getInputForFieldset(htmlDef.page.settingsServerinformation.content.ServerinformationServerLiveviewUrl.id)
+						getInputForFieldset(htmlDef.page.settingsServerinformation.content.ServerinformationServerLiveviewUrl.id),
+						{
+							"type": "br"
+						},
+						{
+							"type": "br"
+						},
+						getLabelForFieldset("DownloadArchive-URL:",htmlDef.page.settingsServerinformation.content.ServerinformationServerDownloadarchiveUrl.id),
+						getInputForFieldset(htmlDef.page.settingsServerinformation.content.ServerinformationServerDownloadarchiveUrl.id)
 					]
 				}
 			},
@@ -667,7 +735,6 @@ function getPageSettingsAutodeactivate() {
 	o =
 	{
 		"attrs": {
-			"data-add-back-btn": "true",
 			"data-role": "page"
 		},
 		"content": [
@@ -851,8 +918,7 @@ function getPageLogin() {
 								"attrs": {
 									"data-theme": "b",
 									"name": "submit",
-									"type": "submit",
-									"value": "submit-value"
+									"type": "submit"
 								},
 								"content": {
 									"text": "Login"
@@ -884,16 +950,13 @@ function getPageLogin() {
 					},
 					{
 						"content": [
+							getAjaxLoaderImg(),
 							{
-								"attrs": {
-									"alt": "ajaxloader",
-									"src": "img/ajaxloader.gif",
-								},
-								"type": "img",
-								"css" : htmlDef.img.miniajaxloader.cl
+								"text": "Try to connect to given server(s): "
 							},
 							{
-								"text": "Try to connect to given server: " + appData.serverinformation.ajaxApiUrl
+								"content" : getListElementsFromArray(appData.serverinformation.ajaxApiUrl),
+								"type" : "ul"
 							}
 						],
 						"css": "ui-body ui-body-e",
@@ -912,7 +975,6 @@ function getPageSettingsPicturerefresh() {
 	o =
 	{
 		"attrs": {
-			"data-add-back-btn": "true",
 			"data-role": "page"
 		},
 		"content": [
@@ -1177,7 +1239,7 @@ function getPageSettings() {
 							},
 							{
 								"content" : {
-									"text" : "Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>"
+									"text" : "Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>"
 								}
 							},
 							{
@@ -1267,7 +1329,7 @@ function getPageSettings() {
 												"type": "br"
 											},
 											{
-												"text": "Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>"
+												"text": "Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>"
 											},
 											{
 												"type": "br"

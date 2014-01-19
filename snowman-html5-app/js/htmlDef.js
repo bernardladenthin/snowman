@@ -2,7 +2,7 @@
  * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,18 @@ var htmlDef = {
 		"cameras" : {
 			"id" : "pageCameras",
 			"content" : {
+				"archiveListingCollapsible" : {
+					"id" : "archiveListingCollapsible"
+				},
+				"archiveListing" : {
+					"id" : "archiveListing"
+				},
+				"archiveListingTree" : {
+					"id" : "archiveListingTree"
+				},
+				"showSuccessCommandArchive" : {
+					"id" : "showSuccessCommandArchive"
+				},
 				"showSuccessCommandArchive" : {
 					"id" : "showSuccessCommandArchive"
 				},
@@ -80,6 +92,12 @@ var htmlDef = {
 				},
 				"yourUsergroups" : {
 					"id" : "yourUsergroups"
+				},
+				"liveviewplaybtn" : {
+					"id" : "liveviewplaybtn"
+				},
+				"liveviewpausebtn" : {
+					"id" : "liveviewpausebtn"
 				}
 			}
 		},
@@ -109,6 +127,9 @@ var htmlDef = {
 				},
 				"ServerinformationServerLiveviewUrl" : {
 					"id" : "ServerinformationServerLiveviewUrl"
+				},
+				"ServerinformationServerDownloadarchiveUrl" : {
+					"id" : "ServerinformationServerDownloadarchiveUrl"
 				}
 			}
 		},

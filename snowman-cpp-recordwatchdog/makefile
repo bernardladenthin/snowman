@@ -1,5 +1,6 @@
 #Bernard Ladenthin
 #2013-07-13
+#bernard.ladenthin@gmail.com
 VERSION = 0.1
 CC      = /usr/bin/g++
 CFLAGS  = --std=c++0x -Wall -Wextra -pedantic-errors -ggdb -DVERSION=\"$(VERSION)\" -D _POSIX_C_SOURCE=200809L

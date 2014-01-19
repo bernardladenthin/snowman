@@ -2,7 +2,7 @@
  * snowman-html5-canvasapi- HTML5 canvas api for snowman.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ function getSnowmanHtml5Canvasapi() {
 			data += additionalData;
 		}
 
-		$.ajax({
+		jQuery.ajax({
 			type: "GET",
 			url: url,
 			data: data,

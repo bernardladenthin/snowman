@@ -3,7 +3,7 @@
  * on a snowman-php-server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ cout
 <<endl
 <<" on a snowman-php-server."
 <<endl
-<<" Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>"
+<<" Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>"
 <<endl
 <<endl
 <<" This program is free software: you can redistribute it and/or modify"

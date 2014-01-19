@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -30,7 +30,6 @@ require_once('globalconfig.php');
  */
 try {
 	$ajax = new Ajax($snowman, JSON_decode($jsonp));
-	$ajax->parseRequestGenerateResponse();
 
 	header('Content-Type: application/json');
 	header('Access-Control-Allow-Origin: *');

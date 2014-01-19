@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -79,7 +79,7 @@ function nis_dir_mkdir($path) {
  * normally means adding a zero ("0") in front of the permission level.
  *
  * @author Jeppe Toustrup (tenzer at tenzer dot dk)
- * @author Bernard Ladenthin (bernard@ladenthin.net)
+ * @author Bernard Ladenthin (bernard.ladenthin@gmail.com)
  * @link http://php.net/chmod More info about chmod on php.net
  * @param $path An either relative or absolute path to a file or directory
  * which should be processed.
@@ -133,6 +133,24 @@ function getMillisFromMillitime($millitime) {
 
 function checkPHPGDExtension() {
 	if (extension_loaded('gd') && function_exists('imagecreatetruecolor')) {
+		return true;
+	}
+	return false;
+}
+
+function makeDownload($file, $dir, $type) {
+	header('Access-Control-Allow-Origin: *');
+	header('Set-Cookie: fileDownload=true; path=/');
+	header("Content-Type: $type");
+	header("Content-Disposition: attachment; filename=\"$file\"");
+	readfile($dir.$file);
+}
+
+function isLocalIp($ip) {
+	if ($ip == '::1' || $ip == "127.0.0.1") {
+		return true;
+	}
+	if ( ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) ) {
 		return true;
 	}
 	return false;

@@ -3,7 +3,7 @@
 # afterwards on a snowman-php-server via snowman-cpp-upload.
 # http://code.google.com/p/snowman/
 #
-# Copyright 2013 Bernard Ladenthin <bernard@ladenthin.net>
+# Copyright 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ def getScreenKillExecByName(screenname):
 snowmanCppUploadArg=["snowman-cpp-upload", "-u", username, "-p", password, "-c",
     cameraname, "-h", host, "--path", path, "-t", "12", "-d", "0"]
 
-screenname="\"screen-snowman-cpp-upload\""
+screenname="screen-snowman-cpp-upload"
 screeenexec=getScreenCreateExecByName(screenname, snowmanCppUploadArg)
 
 killscreen=getScreenKillExecByName(screenname)
@@ -97,7 +97,11 @@ def createWatchdog(pathToMonitor):
     watchdogScreenname="\"screen-snowman-cpp-recordwatchdog_"+cameraname+"\""
     watchdogArg=["snowman-cpp-recordwatchdog", "--pathToMonitor" , pathToMonitor]
     watchdogScreeenexec=getScreenCreateExecByName(watchdogScreenname, watchdogArg)
-    call(watchdogScreeenexec)
+    watchdogScreeenexec.extend("&");
+    parameterString=""
+    for parameter in watchdogScreeenexec:
+        parameterString += parameter + " "
+    os.system(parameterString);
 
 def killProgram():
     global recordthread

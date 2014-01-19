@@ -2,7 +2,7 @@
  * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,14 +115,34 @@ function adaptUri(href) {
 	return absolutizeURI(newBaseURI, href);
 }
 
-function JSONaction(jData) {
+function JSONactionRecursive(jData, i) {
+	if(i >= appData.serverinformation.ajaxApiUrl.length) {
+		return false;
+	}
+
 	jQuery.ajax({
-		url: appData.serverinformation.ajaxApiUrl,
+		url: appData.serverinformation.ajaxApiUrl[i],
 		data: "callback=?" + "&jsonp=" + JSON.stringify(jData),
 		dataType: htmlConst.string.JSON,
-		success: cbJSONResponsee
+		success: cbJSONResponsee,
+		error: function () { JSONactionRecursive(jData, i+1) }
 	});
 	return false;
+}
+
+function JSONaction(jData) {
+	JSONactionRecursive(jData, 0);
+	return false;
+}
+
+function JSONactionDownloadArchive(jData) {
+	//console.log("Download: ");
+	//console.log(jData);
+	window.open(
+		appData.serverinformation.downloadarchiveurl
+			+"?json=" + JSON.stringify(jData)
+		,'download archive'
+	);
 }
 
 function logoutNode(parent) {
@@ -158,20 +178,94 @@ function loginNode(parent) {
 }
 
 function commandNode(parent) {
-	if(parent.createarchive.success == true) {
-		showUserHighligth(toIdSel(htmlDef.page.cameras.content.showSuccessCommandArchive.id),true);
+	var success = false;
+
+	if(isset(parent.createarchive)) {
+		if(parent.createarchive.success == true) {
+			showUserHighligth(toIdSel(htmlDef.page.cameras.content.showSuccessCommandArchive.id),true);
+			success = true;
+		}
 	}
-	if(parent.refreshchmod.success == true) {
-		showUserHighligth(toIdSel(htmlDef.page.cameras.content.showSuccessCommandRefreshChmod.id),true);
+
+	if(isset(parent.refreshchmod)) {
+		if(parent.refreshchmod.success == true) {
+			showUserHighligth(toIdSel(htmlDef.page.cameras.content.showSuccessCommandRefreshChmod.id),true);
+			success = true;
+		}
 	}
+
+	if(success == false) {
+		console.log("unknown commandNode:" + parent);
+	}
+}
+
+function archiveListingNodeSelected(event, data) {
+	var path=data.node.original.attr.path;
+	if(path!=undefined) {
+		jPath = JSON.parse(path);
+		actionDownloadArchive(jPath);
+	}
+}
+
+function transformListingTreeToJstree(listingTree, parentPath) {
+	var data = [];
+
+	$.each(listingTree, function(iKey, iValue) {
+		if(typeof iValue == 'string') {
+			//copy the array
+			localParentPath = parentPath.slice();
+			localParentPath.push(iValue);
+			var element = {
+				"text" : iValue,
+				"attr" : { "path" : JSON.stringify(localParentPath)}
+			}
+			data.push(element);
+		} else if (typeof iValue == 'object' || typeof iValue == 'array') {
+			//copy the array
+			localParentPath = parentPath.slice();
+			localParentPath.push(iKey);
+			var element = {
+				"text" : iKey,
+				"children" : transformListingTreeToJstree(iValue, localParentPath)
+			};
+			data.push(element);
+		}
+	});
+
+	return data;
+}
+
+function createArchiveListing(json) {
+	var archiveListing = $(toIdSel(htmlDef.page.cameras.content.archiveListing.id));
+
+	archiveListing.empty();
+	archiveListing.append(fastFrag.create(createListingTreeRoot()));
+
+	var archiveListingTree = $(toIdSel(htmlDef.page.cameras.content.archiveListingTree.id));
+
+	t = {
+		"text" : "archive",
+		"children" : transformListingTreeToJstree(json, [])
+	};
+
+	archiveListingTree.jstree({
+		"core" : {
+			"data" : t
+		}
+	}).bind("select_node.jstree", archiveListingNodeSelected);
+
+}
+
+function archiveListingNode(parent) {
+	createArchiveListing(parent);
 }
 
 function disableLogin() {
-	$(toIdSel(htmlDef.page.login.content.loginForm.content.loginButton.id)).button("disable");
+	$(toIdSel(htmlDef.page.login.content.loginForm.content.loginButton.id)).attr("disabled", "");
 }
 
 function enableLogin() {
-	$(toIdSel(htmlDef.page.login.content.loginForm.content.loginButton.id)).button("enable");
+	$(toIdSel(htmlDef.page.login.content.loginForm.content.loginButton.id)).removeAttr("disabled");
 }
 
 function hideConnectionToServer() {
@@ -250,6 +344,9 @@ function cbJSONResponsee(data, textStatus, jqXHR) {
 	if(isset(data.command)) {
 		commandNode(data.command);
 	}
+	if(isset(data.archiveListing)) {
+		archiveListingNode(data.archiveListing);
+	}
 }
 
 function hideAllNavbars() {
@@ -270,6 +367,7 @@ function pageEventHandler(page,show,event,ui) {
 					actionLogout();
 					hideAllNavbars();
 					$(toClSel(htmlDef.navbar.loginFalseWithActiveLogin.cl)).show();
+					archiveListingClearAndCollapse();
 				} else {
 					hideAllNavbars();
 					$(toClSel(htmlDef.navbar.loginFalseWithActiveLogin.cl)).show();
@@ -428,6 +526,25 @@ function actionLogout() {
 	return false;
 }
 
+function actionDownloadArchive(path) {
+	jData = {
+		"downloadArchive" : {
+			"path" : path
+		}
+	}
+
+	JSONactionDownloadArchive(jData);
+}
+
+function actionGetArchiveListing() {
+	jData = {
+		"getArchiveListing" : {
+		}
+	}
+
+	JSONaction(jData);
+}
+
 function showUserHighligth(select,show) {
 	if(show) {
 		$(select).fadeIn(200);
@@ -471,6 +588,9 @@ function refreshServerinformation() {
 	$(toIdSel(htmlDef.page.settingsServerinformation.content.ServerinformationServerLiveviewUrl.id)).val(
 		appData.serverinformation.liveviewUrl
 	);
+	$(toIdSel(htmlDef.page.settingsServerinformation.content.ServerinformationServerDownloadarchiveUrl.id)).val(
+		appData.serverinformation.downloadarchiveurl
+	);
 	$(toIdSel(htmlDef.page.settingsServerinformation.content.ServerinformationServerVersion.id)).val(
 		appData.serverinformation.version
 	);
@@ -509,11 +629,11 @@ function deactivateLiveView() {
 
 function showLiveViewButtonPlay(play) {
 	if(play) {
-		$("#liveviewplaybtn").show();
-		$("#liveviewpausebtn").hide();
+		$(toIdSel(htmlDef.page.cameras.content.liveviewplaybtn.id)).show();
+		$(toIdSel(htmlDef.page.cameras.content.liveviewpausebtn.id)).hide();
 	} else {
-		$("#liveviewplaybtn").hide();
-		$("#liveviewpausebtn").show();
+		$(toIdSel(htmlDef.page.cameras.content.liveviewplaybtn.id)).hide();
+		$(toIdSel(htmlDef.page.cameras.content.liveviewpausebtn.id)).show();
 	}
 }
 
@@ -534,4 +654,43 @@ function initSnowmanHtml5CanvasapiInstance() {
 	appData.snowmanHtml5CanvasapiInstance.initCanvas();
 	//appData.snowmanHtml5CanvasapiInstance.enableDebugLog();
 }
+
+function archiveListingCollapsibleExpand() {
+	var archiveListing = $(toIdSel(htmlDef.page.cameras.content.archiveListing.id));
+	archiveListing.empty();
+	archiveListing.append(fastFrag.create(getAjaxLoaderImg()));
+	actionGetArchiveListing();
+}
+
+function archiveListingCollapsibleCollapse() {
+	archiveListingClear();
+}
+
+function archiveListingClearAndCollapse() {
+	archiveListingClear();
+	var archiveListingCollapsible = $(toIdSel(htmlDef.page.cameras.content.archiveListingCollapsible.id));
+	archiveListingCollapsible.trigger( "collapse" );
+}
+
+function archiveListingClear() {
+	var archiveListing = $(toIdSel(htmlDef.page.cameras.content.archiveListing.id));
+	archiveListing.empty();
+}
+
+function initCollapsibleContainer() {
+	var archiveListingCollapsible = $(toIdSel(htmlDef.page.cameras.content.archiveListingCollapsible.id));
+
+	archiveListingCollapsible.on(
+		'collapsibleexpand', archiveListingCollapsibleExpand
+	);
+	archiveListingCollapsible.on(
+		'collapsiblecollapse', archiveListingCollapsibleCollapse
+	);
+
+}
+
+function initNicescroll() {
+	$(toIdSel(htmlDef.page.cameras.content.archiveListing.id)).niceScroll();
+}
+
 

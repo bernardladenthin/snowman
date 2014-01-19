@@ -1,0 +1,7 @@
+AuthName        "snowman"
+AuthType        Basic
+AuthUserFile    /var/www/snowman-php-server/protected/.htpasswd
+
+<Limit GET POST>
+require valid-user
+</Limit>

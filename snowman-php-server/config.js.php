@@ -6,9 +6,23 @@
 		"versiondate": "2013-03-24",
 
 		"owner": "Bernard Ladenthin",
-		"imprinturl": "http://localhost/imprint.html",
-		"ajaxapiurl": "http://localhost/snowman-php-server/ajaxapi.php",
-		"liveviewurl": "http://localhost/snowman-php-server/liveview.php",
+
+		"localurl" : {
+			"ajaxapiurl": [
+				"../snowman-php-server/ajaxapi.php"
+			],
+			"liveviewurl": "../snowman-php-server/liveview.php",
+			"downloadarchiveurl": "../snowman-php-server/downloadarchive.php",
+			"imprinturl": "../snowman-php-server/imprint.html"
+		},
+		"foreignurl" : {
+			"ajaxapiurl": [
+				"../snowman-php-server/ajaxapi.php"
+			],
+			"liveviewurl": "../snowman-php-server/liveview.php",
+			"downloadarchiveurl": "../snowman-php-server/downloadarchive.php",
+			"imprinturl": "../snowman-php-server/imprint.html"
+		},
 
 		"archiveOnlyFromSecureHost" : false,
 		"archiveOnlyAccessableCameras" : false,

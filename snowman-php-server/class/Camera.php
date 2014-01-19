@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -916,44 +916,44 @@ class Camera {
 	 * @return string return the log string
 	 */
 	public final function getArchiveListing($dir=null) {
-		if($dir == null) {
+		if ($dir == null) {
 			$dir = $this->getArchiveDir();
 		}
 
 		$listDir = array();
-		if($handler = opendir($dir)) {
+		if ($handler = opendir($dir)) {
 			while (($sub = readdir($handler)) !== FALSE) {
 				if (!isDotFile($sub)) {
 					$path = $dir.DIRECTORY_SEPARATOR.$sub;
 
-					if(is_file($path)) {
+					if (is_file($path)) {
 						$fileinfo = pathinfo(
 							$path
 						);
 
-						if( isset($fileinfo['extension']) ) {
+						if ( isset($fileinfo['extension']) ) {
 
 							$extension = $fileinfo['extension'];
 							$extensions = $this->getArchiveExtensions();
 							$isValidExtension = false;
 
-							if($this->getArchiveExtensionsCaseSensitive()) {
-								if(in_array($extension, $extensions)) {
+							if ($this->getArchiveExtensionsCaseSensitive()) {
+								if (in_array($extension, $extensions)) {
 									$isValidExtension = true;
 								}
 							} else {
-								if(in_arrayi($extension, $extensions)) {
+								if (in_arrayi($extension, $extensions)) {
 									$isValidExtension = true;
 								}
 							}
 
-							if($isValidExtension) {
-									$listDir[] = $sub;
+							if ($isValidExtension) {
+								$listDir[] = $sub;
 							}
 
 						}
 
-					} else if(is_dir($path)) {
+					} else if (is_dir($path)) {
 						$listDir[$sub] = $this->getArchiveListing($path);
 					}
 				}
@@ -961,7 +961,7 @@ class Camera {
 			closedir($handler);
 		}
 
-		if(contains_array($listDir)) {
+		if (contains_array($listDir)) {
 			//sort directories
 			ksort($listDir);
 		} else {

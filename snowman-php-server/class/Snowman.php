@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,6 +34,7 @@ class Snowman {
 	private $imprinturl;
 	private $ajaxapiurl;
 	private $liveviewurl;
+	private $downloadarchiveurl;
 	private $users;
 	private $cameras;
 	private $securehosts;
@@ -51,6 +52,7 @@ class Snowman {
 	 * @link imprinturl
 	 * @link ajaxapiurl
 	 * @link liveviewurl
+	 * @link downloadarchiveurl
 	 * @link securehosts
 	 * @link archiveOnlyFromSecureHost
 	 * @link archiveOnlyAccessableCameras
@@ -63,9 +65,19 @@ class Snowman {
 		$this->version = $snowman->version;
 		$this->versiondate = $snowman->versiondate;
 		$this->owner = $snowman->owner;
-		$this->imprinturl = $snowman->imprinturl;
-		$this->ajaxapiurl = $snowman->ajaxapiurl;
-		$this->liveviewurl = $snowman->liveviewurl;
+
+		if (isLocalIp($_SERVER["REMOTE_ADDR"])) {
+			$this->imprinturl = $snowman->localurl->imprinturl;
+			$this->ajaxapiurl = $snowman->localurl->ajaxapiurl;
+			$this->liveviewurl = $snowman->localurl->liveviewurl;
+			$this->downloadarchiveurl = $snowman->localurl->downloadarchiveurl;
+		} else {
+			$this->imprinturl = $snowman->foreignurl->imprinturl;
+			$this->ajaxapiurl = $snowman->foreignurl->ajaxapiurl;
+			$this->liveviewurl = $snowman->foreignurl->liveviewurl;
+			$this->downloadarchiveurl = $snowman->foreignurl->downloadarchiveurl;
+		}
+
 		$this->securehosts = $snowman->securehosts;
 		$this->archiveOnlyFromSecureHost = $snowman->archiveOnlyFromSecureHost;
 		$this->archiveOnlyAccessableCameras =
@@ -153,6 +165,15 @@ class Snowman {
 	 */
 	public final function getLiveviewurl() {
 		return $this->liveviewurl;
+	}
+
+	/**
+	 * Get the download archive url.
+	 * @link liveview
+	 * @return string
+	 */
+	public final function getDownloadarchiveurl() {
+		return $this->downloadarchiveurl;
 	}
 
 	/**

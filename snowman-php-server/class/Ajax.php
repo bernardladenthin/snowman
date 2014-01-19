@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,7 +34,7 @@ class Ajax {
 	 * JSON request from client.
 	 * @var StdClass
 	 */
-	private $JSONResquest;
+	private $JSONRequest;
 
 	/**
 	 * JSON response for client.
@@ -44,17 +44,45 @@ class Ajax {
 
 	/**
 	 * Constructor
-	 * {@link JSONResquest}
-	 * @param StdClass $JSONResquest
+	 * {@link JSONRequest}
+	 * @param StdClass $JSONRequest
 	 * @return void
 	 */
 	public function ajax(
 		$snowman,
-		$JSONResquest
+		$JSONRequest
 	) {
 		$this->snowman = $snowman;
-		$this->JSONResquest = $JSONResquest;
+		$this->JSONRequest = $JSONRequest;
 		$this->snowmanresponse = new StdClass();
+
+		if(isset($this->JSONRequest->login)) {
+			$this->requestNodeLogin($this->JSONRequest->login);
+		}
+
+		if(isset($this->JSONRequest->logout)) {
+			$this->requestNodeLogout($this->JSONRequest->logout);
+		}
+
+		if(isset($this->JSONRequest->serverinformation)) {
+			$this->requestNodeServerinformation(
+				$this->JSONRequest->serverinformation
+			);
+		}
+
+		if(isset($this->JSONRequest->camerainformation)) {
+			$this->requestNodeCamerainformation(
+				$this->JSONRequest->camerainformation
+			);
+		}
+
+		if(isset($this->JSONRequest->command)) {
+			$this->requestNodeCommand($this->JSONRequest->command);
+		}
+
+		if(isset($this->JSONRequest->getArchiveListing)) {
+			$this->requestNodeGetArchiveListing($this->JSONRequest->getArchiveListing);
+		}
 	}
 
 	/**
@@ -64,43 +92,6 @@ class Ajax {
 	 */
 	public final function getSnowmanResponse() {
 		return $this->snowmanresponse;
-	}
-
-	/**
-	 * Parse request and generate response.
-	 * @link JSONResquest
-	 * @link JSONResponse
-	 * @return void
-	 */
-	public final function parseRequestGenerateResponse() {
-
-		if(isset($this->JSONResquest->login)) {
-			$this->requestNodeLogin($this->JSONResquest->login);
-		}
-
-		if(isset($this->JSONResquest->logout)) {
-			$this->requestNodeLogout($this->JSONResquest->logout);
-		}
-
-		if(isset($this->JSONResquest->serverinformation)) {
-			$this->requestNodeServerinformation(
-				$this->JSONResquest->serverinformation
-			);
-		}
-
-		if(isset($this->JSONResquest->camerainformation)) {
-			$this->requestNodeCamerainformation(
-				$this->JSONResquest->camerainformation
-			);
-		}
-
-		if(isset($this->JSONResquest->command)) {
-			$this->requestNodeCommand($this->JSONResquest->command);
-		}
-
-		if(isset($this->JSONResquest->getArchiveListing)) {
-			$this->requestNodeGetArchiveListing($this->JSONResquest->getArchiveListing);
-		}
 	}
 
 	/**
@@ -176,7 +167,6 @@ class Ajax {
 
 			foreach($accessgrantedcameras as $camera) {
 				$archiveListing = $camera->getArchiveListing();
-				//array_multisort($archiveListing);
 
 				$this->snowmanresponse->archiveListing[$camera->getName()] =
 					$archiveListing;
@@ -290,6 +280,9 @@ class Ajax {
 
 		$this->snowmanresponse->serverinformation->liveviewUrl =
 			$this->snowman->getLiveviewUrl();
+
+		$this->snowmanresponse->serverinformation->downloadarchiveurl =
+			$this->snowman->getDownloadarchiveurl();
 
 		$this->snowmanresponse->serverinformation->version =
 			$this->snowman->getVersion();

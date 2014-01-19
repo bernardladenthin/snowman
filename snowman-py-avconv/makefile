@@ -1,5 +1,6 @@
 #Bernard Ladenthin
 #2013-05-01
+#bernard.ladenthin@gmail.com
 VERSION = 1.0
 
 prefix=/usr

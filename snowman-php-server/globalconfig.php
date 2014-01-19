@@ -3,7 +3,7 @@
  * snowman-php-server - PHP script to run a snowman server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -24,6 +24,8 @@
  */
 
 //global variables
+$disable_ob_gzhandler = isset($disable_ob_gzhandler) ?
+	$disable_ob_gzhandler : false;
 $camerauploadNameParameter = "cameraname";
 $camerauploadFileParameter = "cameraimage";
 $sessionUsernameParameter = "username";
@@ -34,6 +36,7 @@ $requestPasswordParameter = "password";
 $requestPhpsessidParameter = "PHPSESSID";
 $requestJsonpParameter = "jsonp";
 $requestCallbackParameter = "callback";
+$requestJsonParameter = "json";
 
 function alClass($class) {
 	include 'class/' . $class . '.php';
@@ -62,7 +65,12 @@ if(!checkPHPGDExtension()) {
 //TODO: BLCRITICAL: put this in the config with a overwrite flag
 setlocale(LC_TIME, 'German_Germany');
 date_default_timezone_set('Europe/Berlin');
-if(!ob_start("ob_gzhandler")) ob_start();
+
+if($disable_ob_gzhandler) {
+	ob_start();
+} else {
+	if(!ob_start("ob_gzhandler")) ob_start();
+}
 
 $configFilename = 'config.js.php';
 if(!file_exists ($configFilename)) {
@@ -116,6 +124,15 @@ if(isset($_REQUEST[$requestJsonpParameter])) {
 	}
 	if(isset($_REQUEST[$requestCallbackParameter])) {
 		$jsonpCallback = $_REQUEST[$requestCallbackParameter];
+	}
+}
+
+$json = false;
+if(isset($_REQUEST[$requestJsonParameter])) {
+	$json = $_REQUEST[$requestJsonParameter];
+	//compatibility for php < 5.4:
+	if(get_magic_quotes_gpc()) {
+		$json = stripslashes($json);
 	}
 }
 

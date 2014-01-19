@@ -2,7 +2,7 @@
 # snowman-py-ffmpeg - Python script to archive images using ffmpeg.
 # http://code.google.com/p/snowman/
 #
-# Copyright 2013 Bernard Ladenthin <bernard@ladenthin.net>
+# Copyright 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

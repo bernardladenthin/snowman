@@ -6,7 +6,7 @@
  * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
  * http://code.google.com/p/snowman/
  *
- * Copyright (C) 2013 Bernard Ladenthin <bernard@ladenthin.net>
+ * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,39 +29,42 @@
 		 * you can put here your server address, relative or absolute
 		 */
 
-/*
-		appData = {
-			"serverinformation" : {
-				"ajaxApiUrl" : "./ajax.php"
-			}
-		}
-
-		appData = {
-			"serverinformation" : {
-				"ajaxApiUrl" : "http://example.com/snowman-php-server/ajaxapi.php"
-			}
-		}
-*/
 		//TODO: use a input field on start
 		appData = {
 			"serverinformation" : {
-				"ajaxApiUrl" : "http://localhost/snowman-php-server/ajaxapi.php"
+				"ajaxApiUrl" : [
+					"../snowman-php-server/ajaxapi.php",
+					"http://localhost/snowman-php-server/ajaxapi.php",
+					"http://example.com/snowman-php-server/ajaxapi.php"
+				]
 			}
 		}
 	</script>
 	<title>snowman-html5-app</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./js/lib/themes/default/style.min.css" />
 
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="./js/lib/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript">
+	$(document).on("mobileinit", function() {
+		$.mobile.toolbar.prototype.options.addBackBtn = true;
+		$.mobile.toolbar.prototype.options.backBtnText = "Back";
+	});
+	</script>
+<!--	<script type="text/javascript" src="./js/lib/require.js"></script>-->
+	<script type="text/javascript" src="./js/lib/jquery.ui.touch.js"></script>
+	<script type="text/javascript" src="./js/lib/jquery.nicescroll.js"></script>
 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="./jquery.mobile-1.4.0/jquery.mobile-1.4.0.min.css" />
+	<script type="text/javascript" src="./jquery.mobile-1.4.0/jquery.mobile-1.4.0.min.js"></script>
 
-	<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-2.4.min.js"></script>
-	<script type="text/javascript" src="http://snowman.googlecode.com/files/snowman-html5-canvasapi-1.0.0.min.js"></script>
+	<script type="text/javascript" src="./js/lib/jquery.json-2.4.min.js"></script>
+	<script type="text/javascript" src="./js/lib/jstree.min.js"></script>
+	<script type="text/javascript" src="./js/lib/snowman-html5-canvasapi-1.0.0.min.js"></script>
+	<script type="text/javascript" src="./js/lib/json2.min.js"></script>
+	<script type="text/javascript" src="./js/lib/fastFrag.min.js"></script>
 
-	<script type="text/javascript" src="./js/fastFrag.min.js"></script>
 	<script type="text/javascript" src="./js/javascript.js"></script>
 	<script type="text/javascript" src="./js/htmlDef.js"></script>
 	<script type="text/javascript" src="./js/page.js"></script>
@@ -80,6 +83,12 @@ $('<style type="text/css">'
 	+ "-moz-box-shadow:0px 0px 8px rgba(0, 0, 0, .6);"
 	+ "-webkit-box-shadow:0px 02px 8px rgba(0, 0, 0, .6);"
 	+ "-khtml-box-shadow:0px 0px 8px rgba(0, 0, 0, .6);"
+	+ "}"
+
++ toIdSel(htmlDef.page.cameras.content.archiveListing.id) +
+	  "{"
+	+ "width:100%;"
+	+ "overflow:scroll;"
 	+ "}"
 
 + '</style>').appendTo("head");
@@ -102,6 +111,8 @@ $(function() {
 	initPageHandler();
 	actionServerinformation();
 	initSnowmanHtml5CanvasapiInstance();
+	initCollapsibleContainer();
+	initNicescroll();
 });
 </script>
 </body>
