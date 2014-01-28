@@ -31,33 +31,66 @@ $response->imageUpload = new stdClass();
  * File for cameraupload
  * @subpackage actions
  */
-if(
-		$isloginok
-	&&	isset($_REQUEST[$camerauploadNameParameter])
-	&&	isset($_FILES[$camerauploadFileParameter])
-	&&	(
-			$_FILES[$camerauploadFileParameter]['type'] == 'image/jpeg'
-		||	$_FILES[$camerauploadFileParameter]['type'] == 'image/jpg'
-	)
-) {
-	$cameraname = urldecode($_REQUEST[$camerauploadNameParameter]);
+$uploadMethod = $uploadMethodWrong = -1;
+$uploadMethodFile = 0;
+$uploadMethodRequest = 1;
+
+if (!$isloginok) {
+	$response->imageUpload->success = false;
+	$response->imageUpload->wrongLogin = true;
+} else {
+	if(
+				isset($_REQUEST[$uploadNameCameraname])
+		&&	isset($_FILES[$uploadNameCameraimage])
+		&&	(
+					$_FILES[$uploadNameCameraimage]['type'] == 'image/jpeg'
+			||	$_FILES[$uploadNameCameraimage]['type'] == 'image/jpg'
+			||	$_FILES[$uploadNameCameraimage]['type'] == 'application/octet-stream'
+		)
+	) {
+		$uploadMethod = $uploadMethodFile;
+	} else if (
+				isset($_REQUEST[$uploadNameCameraname])
+		&&	isset($_REQUEST[$uploadNameCameraimage])
+		&&	isset($_REQUEST[$uploadNameFilename])
+	) {
+			$uploadMethod = $uploadMethodRequest;
+	}
+}
+
+if ($uploadMethod != $uploadMethodWrong) {
+	$cameraname = urldecode($_REQUEST[$uploadNameCameraname]);
 	$camera = camera::getObjByName($snowman->getCameras(), $cameraname);
+
+	$rawFileName = "";
+	$tmpFilePath = "";
+
+	if ($uploadMethod == $uploadMethodFile) {
+		$rawFileName = $_FILES[$uploadNameCameraimage]['name'];
+		$tmpFilePath = $_FILES[$uploadNameCameraimage]['tmp_name'];
+	} else if($uploadMethod == $uploadMethodRequest) {
+		$rawFileName = $_REQUEST[$uploadNameFilename];
+		$tmpFileHandle = tmpfile();
+		fwrite($tmpFileHandle, $_REQUEST[$uploadNameCameraimage]);
+		fseek($tmpFileHandle, 0);
+		$tmpFilePath = array_search(
+			'uri',
+			@array_flip(stream_get_meta_data($tmpFileHandle))
+		);
+	}
+
 	if(is_object($camera)) {
 		$camerawriter = new Camerawriter($camera);
 
-		$camerawriter->loadSpecificImage(
-			$_FILES[$camerauploadFileParameter]['tmp_name']
-		);
+		$camerawriter->loadSpecificImage($tmpFilePath);
 
-		$form = $camerawriter->decodeFilename(
-			$_FILES[$camerauploadFileParameter]['name']
-		);
+		$form = $camerawriter->decodeFilename($rawFileName);
 
-		if($camerawriter->getCamera()->getLogRawCameraUpload()) {
-			$logmsg = "Uploaded\nRAW request: ".$_FILES[$camerauploadFileParameter]['name'].";";
+		if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
+			$logmsg = "Uploaded\nRAW request: ".$rawFileName.";";
 		}
 
-		if(is_array($form)) {
+		if (is_array($form)) {
 			/**
 			 * The upload format tells us only the begin, the fps an the
 			 * current one, calculate the correct time this would be rounded
@@ -65,28 +98,29 @@ if(
 			 */
 			$posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
 
-			if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+			if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
 				$logmsg .= "\nposixMillis: $posixMillis";
 			}
 
 			$watermarkMsg = $camerawriter->createWatermark($posixMillis);
 
-			if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+			if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
 				$logmsg .= "\nwatermarkMsg: $watermarkMsg\n\n";
 			}
 
 			$camerawriter->createBottomTextBranding();
 			//write the image with original filename from upload
 			//check before write to correct file name
-			$fileinfo = pathinfo($_FILES[$camerauploadFileParameter]['name']);
-			if(
+			$fileinfo = pathinfo($rawFileName);
+
+			if (
 				in_array(
 					$fileinfo['extension'],
 					$camerawriter->getCamera()->getImageExtensions()
 				)
 			) {
 				$filename = "";
-				if($camera->getCamerawriterFormatPosixMillis()) {
+				if ($camera->getCamerawriterFormatPosixMillis()) {
 					//use POSIX millis format
 					$filename =
 					$form['cameraname'] .
@@ -96,17 +130,17 @@ if(
 					$form['extension'];
 				} else {
 					//use original filename
-					$filename = $_FILES[$camerauploadFileParameter]['name'];
+					$filename = $rawFileName;
 				}
 
 				$success = $camerawriter->writeToFile($filename);
 
 
-				if($camerawriter->getCamera()->getLogRawCameraUpload()) {
+				if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
 					$camerawriter->getCamera()->writeLog($logmsg);
 				}
 
-				if($success) {
+				if ($success) {
 					unset($camerawriter);
 					$response->imageUpload->success = true;
 				} else {
@@ -133,7 +167,7 @@ if(
 
 $json = json_encode($response);
 
-if($jsonpCallback) {
+if ($jsonpCallback) {
 	$json = $jsonpCallback."(".$json.")";
 }
 echo $json;

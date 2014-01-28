@@ -26,13 +26,17 @@
 //global variables
 $disable_ob_gzhandler = isset($disable_ob_gzhandler) ?
 	$disable_ob_gzhandler : false;
-$camerauploadNameParameter = "cameraname";
-$camerauploadFileParameter = "cameraimage";
 $sessionUsernameParameter = "username";
 $sessionPasswordParameter = "password";
 $sessionIsLoginOkParameter = "isLoginOK";
+
 $requestUsernameParameter = "username";
 $requestPasswordParameter = "password";
+
+$uploadNameCameraname = "cameraname";
+$uploadNameCameraimage = "cameraimage";
+$uploadNameFilename = "filename";
+
 $requestPhpsessidParameter = "PHPSESSID";
 $requestJsonpParameter = "jsonp";
 $requestCallbackParameter = "callback";
