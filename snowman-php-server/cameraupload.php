@@ -55,10 +55,13 @@ if (!$isloginok) {
 		&&	isset($_REQUEST[$uploadNameFilename])
 	) {
 			$uploadMethod = $uploadMethodRequest;
+	} else {
+			$response->imageUpload->success = false;
+			$response->imageUpload->wrongRequest = true;
 	}
 }
 
-if ($uploadMethod != $uploadMethodWrong) {
+if ($isloginok && ($uploadMethod != $uploadMethodWrong)) {
 	$cameraname = urldecode($_REQUEST[$uploadNameCameraname]);
 	$camera = camera::getObjByName($snowman->getCameras(), $cameraname);
 
@@ -162,7 +165,7 @@ if ($uploadMethod != $uploadMethodWrong) {
 	}
 } else {
 	$response->imageUpload->success = false;
-	$response->imageUpload->wrongRequest = true;
+	$response->imageUpload->unknownError = true;
 }
 
 $json = json_encode($response);
