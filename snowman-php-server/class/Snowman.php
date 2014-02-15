@@ -322,12 +322,7 @@ class Snowman {
 		return false;
 	}
 
-	/**
-	 * Archive the cameras.
-	 * @return string log information
-	 */
-	public final function createArchive() {
-		$archivestring = "";
+    private final function getArchiveCameras() {
 		$cameras = array();
 
 		if($this->getLoginUser()) {
@@ -350,9 +345,36 @@ class Snowman {
 				$cameras = $this->getCameras();
 			}
 		}
+        return $cameras;
+    }
+
+	/**
+	 * Archive the cameras.
+	 * @return string log information
+	 */
+	public final function createArchive() {
+		$archivestring = "";
+		$cameras = $this->getArchiveCameras();
 
 		foreach($cameras as $camera) {
 			$archivestring .= $camera->createArchive()."\n";
+		}
+
+		$this->refreshChmod();
+
+		return $archivestring;
+	}
+
+	/**
+	 * Purge the archive.
+	 * @return string log information
+	 */
+	public final function purgeArchive() {
+		$archivestring = "";
+		$cameras = $this->getArchiveCameras();
+
+		foreach($cameras as $camera) {
+			$archivestring .= $camera->purgeArchive()."\n";
 		}
 
 		$this->refreshChmod();

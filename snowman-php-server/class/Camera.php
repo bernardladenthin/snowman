@@ -627,6 +627,7 @@ class Camera {
 				$this->getDir()
 			)
 		) {
+			// by default file names are sorted alphabetical in ascending order
 			$files = scandir($this->getDir());
 			$files = removeDotFiles($files);
 			foreach($files as $file) {
@@ -909,6 +910,51 @@ class Camera {
 		return $logmsg;
 	}
 
+
+    public static function archiveListingToPathList($listing, $prepend="") {
+        $list = array();
+        $prestring = $prepend.DIRECTORY_SEPARATOR;
+        foreach($listing as $key=>$value) {
+            if (is_string($value)) {
+                $list[] = $prestring.$value;
+            } else if (is_array($value)) {
+                $list = array_merge($list, Camera::archiveListingToPathList($value, $prestring.$key));
+            }
+        }
+        return $list;
+    }
+
+	/**
+	 * Purge the archive from a camera.
+	 * @param boolean $delay if true,
+	 * the internal {@link $delay} of images is used.
+	 * @return string return the log string
+	 */
+	public final function purgeArchive($delay=true) {
+        $logmsg = "";
+        $archiveListing = $this->getArchiveListing();
+
+        $archiveDir = $this->getArchiveDir();
+        $fullList = Camera::archiveListingToPathList($archiveListing, "");
+        $removedCount = 0;
+        //200days for now
+        $timeLimit=time()-(60*60*24*200);
+
+        foreach($fullList as $element) {
+            $filename = $archiveDir.$element;
+            if (filemtime($filename) < $timeLimit) {
+                unlink($filename);
+                $removedCount++;
+            }
+        }
+        removeEmptySubfolders($archiveDir);
+
+        $logmsg .= "removed ".$removedCount." archives;";
+
+		$this->writeLog($logmsg);
+		return $logmsg;
+	}
+
 	/**
 	 * Get a listing of all archived files.
 	 * @param boolean $delay if true,
@@ -971,6 +1017,5 @@ class Camera {
 
 		return $listDir;
 	}
-
 }
 

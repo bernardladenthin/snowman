@@ -156,3 +156,31 @@ function isLocalIp($ip) {
 	return false;
 }
 
+/**
+ * Remove empty subfolders
+ * from: http://stackoverflow.com/questions/1833518/remove-empty-subfolders-with-php
+ * @param string the path
+ */
+function removeEmptySubfolders($path) {
+
+  if(substr($path,-1)!= DIRECTORY_SEPARATOR){
+    $path .= DIRECTORY_SEPARATOR;
+  }
+  $d2 = array('.','..');
+  $dirs = array_diff(glob($path.'*', GLOB_ONLYDIR),$d2);
+  foreach($dirs as $d){
+    removeEmptySubfolders($d);
+  }
+
+  if(count(array_diff(glob($path.'*'),$d2))===0){
+    $checkEmpSubDir = explode(DIRECTORY_SEPARATOR,$path);
+    for($i=count($checkEmpSubDir)-1;$i>0;$i--){
+      $path = substr(str_replace($checkEmpSubDir[$i],"",$path),0,-1);
+
+      if(($files = @scandir($path)) && count($files) <= 2){
+        rmdir($path);
+      }
+    }
+  }
+}
+
