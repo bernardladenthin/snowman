@@ -1,142 +1,170 @@
-<?php exit;/*DO NOT REMOVE THIS LINE IT MUST STAY TO PROTECT ILLEGAL ACCESS*/?>
+<?php exit; /*DO NOT REMOVE THIS LINE IT MUST STAY TO PROTECT ILLEGAL ACCESS*/ ?>
 
 {
-	"snowman": {
-		"version": "3.0.0",
-		"versiondate": "2013-03-24",
-
-		"owner": "Bernard Ladenthin",
-
-		"localurl" : {
-			"ajaxapiurl": [
-				"../snowman-php-server/ajaxapi.php"
-			],
-			"liveviewurl": "../snowman-php-server/liveview.php",
-			"downloadarchiveurl": "../snowman-php-server/downloadarchive.php",
-			"imprinturl": "../snowman-php-server/imprint.html"
-		},
-		"foreignurl" : {
-			"ajaxapiurl": [
-				"../snowman-php-server/ajaxapi.php"
-			],
-			"liveviewurl": "../snowman-php-server/liveview.php",
-			"downloadarchiveurl": "../snowman-php-server/downloadarchive.php",
-			"imprinturl": "../snowman-php-server/imprint.html"
-		},
-
-		"archiveOnlyFromSecureHost" : false,
-		"archiveOnlyAccessableCameras" : false,
-		"securehosts": ["localhost"]
-	},
-	"users" : [
-		{
-			"name": "admin",
-			"password": "admin",
-			"passwordHashAlgorithm" : false,
-			"loginDisabled" : false,
-
-			"groups": ["admin"]
-		},
-		{
-			"name": "admin2",
-			"password": "admin2",
-			"passwordHashAlgorithm" : false,
-			"loginDisabled" : false,
-
-			"groups": ["admin"]
-		},
-		{
-			"name": "guest",
-			"password": "guest",
-			"passwordHashAlgorithm" : false,
-			"loginDisabled" : false,
-
-			"groups": ["guest"]
-		}
-	],
-	"cameras" : [
-		{
-			"name": "camera0",
-			"toptextbranding" : "code.google.com/p/snowman/ | ",
-			"bottomtextbranding": "This is camera zero.",
-			"dir": "protected/camera0_pictures",
-
-			"refresh": "700",
-			"delay": "15",
-
-			"width": "640",
-			"height": "360",
-
-			"userdeny": [],
-			"userallow": [],
-			"groupdeny": ["guest"],
-			"groupallow": ["admin", "user"],
-
-			"tmpPathPrepend": "protected/",
-			"archiveDir": "protected/camera0_archive",
-			"archiveDirDate": "Y/m/d/H",
-
-			"archiveMaxFiles": 5000,
-			"archivePackageFormatZip" : false,
-			"archivePackageFormatZipName" : "_Ymd_H_i_s",
-			"archivePackageFormatCustomExec" :
-"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
-			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
-			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
-			"archiveImageUnlink" : true,
-			"archiveLogFile" : "protected/log.txt",
-
-			"archiveExtensions": ["mp4"],
-			"archiveExtensionsCaseSensitive": false,
-
-			"imageExtensions": ["jpg", "jpeg"],
-			"imageExtensionsCaseSensitive": false,
-
-			"camerawriterFormatPosixMillis" : true,
-			"maximumFilesystemFileArray" : 9999,
-			"logRawCameraUpload" : false
-		},
-		{
-			"name": "camera1",
-			"toptextbranding" : "code.google.com/p/snowman/ | ",
-			"bottomtextbranding": "This is camera one.",
-			"dir": "protected/camera1_pictures",
-
-			"refresh": "700",
-			"delay": "3",
-
-			"width": "640",
-			"height": "360",
-
-			"userdeny": [],
-			"userallow": [],
-			"groupdeny": ["guest"],
-			"groupallow": ["admin", "user"],
-
-			"tmpPathPrepend": "protected/",
-			"archiveDir": "protected/camera1_archive",
-			"archiveDirDate": "Y/m/d/H",
-
-			"archiveMaxFiles": 5000,
-			"archivePackageFormatZip" : false,
-			"archivePackageFormatZipName" : "_Ymd_H_i_s",
-			"archivePackageFormatCustomExec" :
-"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
-			"archivePackageFormatCustomExecImageFormat" : "%d.jpeg",
-			"archivePackageFormatCustomExecDateParameter" : "Ymd_H_i_s",
-			"archiveImageUnlink" : true,
-			"archiveLogFile" : "protected/log.txt",
-
-			"archiveExtensions": ["mp4"],
-			"archiveExtensionsCaseSensitive": false,
-
-			"imageExtensions": ["jpg", "jpeg"],
-			"imageExtensionsCaseSensitive": false,
-
-			"camerawriterFormatPosixMillis" : true,
-			"maximumFilesystemFileArray" : 9999,
-			"logRawCameraUpload" : false
-		}
-	]
+   "snowman":{
+      "version":"3.0.0",
+      "versionDate":"2014-03-24",
+      "owner":"Bernard Ladenthin",
+      "lcTime":"German_Germany",
+      "defaultTimezone":"Europe/Berlin",
+      "localUrl":{
+         "ajaxApiUrl":[
+            "../snowman-php-server/ajaxapi.php"
+         ],
+         "liveViewUrl":"../snowman-php-server/liveview.php",
+         "downloadArchiveUrl":"../snowman-php-server/downloadarchive.php",
+         "imprintUrl":"../snowman-php-server/imprint.html"
+      },
+      "noLocalUrl":{
+         "ajaxApiUrl":[
+            "../snowman-php-server/ajaxapi.php"
+         ],
+         "liveViewUrl":"../snowman-php-server/liveview.php",
+         "downloadArchiveUrl":"../snowman-php-server/downloadarchive.php",
+         "imprintUrl":"../snowman-php-server/imprint.html"
+      },
+      "archiveOnlyFromSecureHost":false,
+      "archiveOnlyAccessibleCameras":false,
+      "secureHosts":[
+         "localhost"
+      ]
+   },
+   "users":[
+      {
+         "name":"admin",
+         "password":"admin",
+         "passwordHashAlgorithm":"",
+         "loginDisabled":false,
+         "groups":[
+            "admin"
+         ]
+      },
+      {
+         "name":"admin2",
+         "password":"admin2",
+         "passwordHashAlgorithm":"",
+         "loginDisabled":false,
+         "groups":[
+            "admin"
+         ]
+      },
+      {
+         "name":"guest",
+         "password":"guest",
+         "passwordHashAlgorithm":"",
+         "loginDisabled":false,
+         "groups":[
+            "guest"
+         ]
+      }
+   ],
+   "cameras":[
+      {
+         "name":"camera0",
+         "toptextbranding":"code.google.com/p/snowman/ | ",
+         "bottomtextbranding":"This is camera zero.",
+         "dir":"protected/camera0_pictures",
+         "refresh":700,
+         "delay":15,
+         "width":640,
+         "height":360,
+         "acl":{
+            "users":{
+                "deny":[
+                ],
+                "allow":[
+                ]
+            },
+            "groups":{
+                "deny":[
+                    "guest"
+                ],
+                "allow":[
+                    "admin",
+                    "user"
+                ]
+            }
+         },
+         "tmpPathPrepend":"protected/",
+         "archive":{
+            "dir":"protected/camera0_archive",
+            "dirDate":"Y/m/d/H",
+            "maxFiles":5000,
+            "packageFormatZip":false,
+            "packageFormatZipName":"_Ymd_H_i_s",
+            "packageFormatCustomExec":"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
+            "packageFormatCustomExecImageFormat":"%d.jpeg",
+            "packageFormatCustomExecDateParameter":"Ymd_H_i_s",
+            "imageUnlink":true,
+            "logFile":"protected/log.txt",
+            "extensions":[
+                "mp4"
+            ],
+            "extensionsCaseSensitive":false,
+            "purgeTimeLimit":17280000
+         },
+         "imageExtensions":[
+            "jpg",
+            "jpeg"
+         ],
+         "imageExtensionsCaseSensitive":false,
+         "camerawriterFormatPosixMillis":true,
+         "maximumFilesystemFileArray":9999,
+         "logRawCameraUpload":false
+      },
+      {
+         "name":"camera1",
+         "toptextbranding":"code.google.com/p/snowman/ | ",
+         "bottomtextbranding":"This is camera one.",
+         "dir":"protected/camera1_pictures",
+         "refresh":700,
+         "delay":3,
+         "width":640,
+         "height":360,
+         "acl":{
+            "users":{
+                "deny":[
+                ],
+                "allow":[
+                ]
+            },
+            "groups":{
+                "deny":[
+                    "guest"
+                ],
+                "allow":[
+                    "admin",
+                    "user"
+                ]
+            }
+         },
+         "tmpPathPrepend":"protected/",
+         "archive":{
+            "dir":"protected/camera1_archive",
+            "dirDate":"Y/m/d/H",
+            "maxFiles":5000,
+            "packageFormatZip":false,
+            "packageFormatZipName":"_Ymd_H_i_s",
+            "packageFormatCustomExec":"snowman-py-avconv.py -c \"%s\" -d \"%s\" -s \"%s\" -t \"%s\" > /dev/null 2>/dev/null &",
+            "packageFormatCustomExecImageFormat":"%d.jpeg",
+            "packageFormatCustomExecDateParameter":"Ymd_H_i_s",
+            "imageUnlink":true,
+            "logFile":"protected/log.txt",
+            "extensions":[
+                "mp4"
+            ],
+            "extensionsCaseSensitive":false,
+            "purgeTimeLimit":17280000
+         },
+         "imageExtensions":[
+            "jpg",
+            "jpeg"
+         ],
+         "imageExtensionsCaseSensitive":false,
+         "camerawriterFormatPosixMillis":true,
+         "maximumFilesystemFileArray":9999,
+         "logRawCameraUpload":false
+      }
+   ]
 }
 

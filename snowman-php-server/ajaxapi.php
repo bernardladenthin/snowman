@@ -24,27 +24,28 @@
  */
 
 require_once('globalconfig.php');
+use net\ladenthin\snowman\phpserver\Ajax;
 
 /**
  * File for Ajax interaction
  */
 try {
-	$ajax = new Ajax($snowman, JSON_decode($jsonp));
+    $ajax = new Ajax($snowman, JSON_decode($jsonp));
 
-	header('Content-Type: application/json');
-	header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Origin: *');
 
-	$json = json_encode($ajax->getSnowmanResponse());
+    $json = json_encode($ajax->getSnowmanResponse());
 
-	if($jsonpCallback) {
-		$json = $jsonpCallback."(".$json.")";
-	}
-	echo $json;
+    if ($jsonpCallback) {
+        $json = $jsonpCallback . "(" . $json . ")";
+    }
+    echo $json;
 
-	ob_flush();
+    ob_flush();
 
 } catch (Exception $e) {
-	echo 'Exception: ', $e->getMessage(), "\n";
-	exit;
+    echo 'Exception: ', $e->getMessage(), "\n";
+    exit;
 }
 

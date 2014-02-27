@@ -19,174 +19,102 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace net\ladenthin\snowman\phpserver;
+
 /**
- * Class for a user.
-*/
-class User {
+ * Class for an user.
+ */
+class User
+{
+    private $cUser;
+    /**
+     * Constructor.
+     * @param \stdClass $stdClass Configuration object.
+     */
+    public function __construct($stdClass)
+    {
+        $this->cUser = new CUser($stdClass);
+    }
 
-	/**
-	 * Name of the user.
-	 * @var string
-	 */
-	private $name;
+    /**
+     * Returns the configuration.
+     * @return CUser
+     */
+    public function getCUser() {
+        return $this->cUser;
+    }
 
-	/**
-	 * Password of the user.
-	 * @var string
-	 */
-	private $password;
+    /**
+     * Check for correct login data and user is not disabled.
+     * @param string $name name from the user
+     * @param string $password password from the user (plain text)
+     * @return boolean true if login tupel are correct, otherwise false.
+     */
+    public final function isLoginOK($name, $password)
+    {
+        if ($this->getCUser()->getPasswordHashAlgorithm()) {
+            $password = hash($this->getCUser()->getPasswordHashAlgorithm(), $password);
+        }
 
-	/**
-	 * The password hash algorithm.
-	 * Possible values: plain, sha1 and md5.
-	 * @link http://www.php.net/manual/de/function.hash.php
-	 * @var string
-	 */
-	private $passwordHashAlgorithm;
+        if (
+            !$this->getCUser()->isLoginDisabled()
+            && $this->getCUser()->getName() == $name
+            && $this->getCUser()->getPassword() == $password
+        ) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Groups of the user
-	 * @var array
-	 */
-	private $groups;
+    /**
+     * Check if the user is in a single group.
+     * @param array $groups array of strings with group names.
+     * @return boolean true if the user is in the group array, otherwise false.
+     */
+    public final function isInGroups($groups)
+    {
+        foreach ($groups as $group) {
+            if (in_array($group, $this->getCUser()->getGroups())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * User is disabled.
-	 * @var boolean
-	 */
-	private $loginDisabled;
+    /**
+     * Check if the user is in array.
+     * @param array $users array of strings with group names.
+     * @return boolean true if the user is in the group array, otherwise false.
+     */
+    public final function isInUsers($users)
+    {
+        foreach ($users as $user) {
+            if ($user == $this->getCUser()->getName()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Construct a user from stdClass object.
-	 * @link name
-	 * @link password
-	 * @link passwordHashAlgorithm
-	 * @link groups
-	 * @link loginDisabled
-	 * @param StdClass $user
-	 */
-	public function user(
-		$stdClass
-	) {
-		$this->name = $stdClass->name;
-		$this->password = $stdClass->password;
-		$this->passwordHashAlgorithm = $stdClass->passwordHashAlgorithm;
-		if(!is_array($stdClass->groups)) {
-			printf('Warning: $groups should be an array.');
-		}
-		$this->groups = $stdClass->groups;
-		$this->loginDisabled = $stdClass->loginDisabled;
-	}
-
-	/**
-	 * Getter for <code>$name</code>.
-	 * @return string
-	 */
-	public final function getName() {
-		return $this->name;
-	}
-
-	/**
-	 * Getter for <code>$password</code>.
-	 * @link $password
-	 * @return string
-	 */
-	public final function getPassword() {
-		return $this->password;
-	}
-
-	/**
-	 * Getter for <code>$groups</code>.
-	 * @link $groups
-	 * @return array
-	 */
-	public final function getGroups() {
-		return $this->groups;
-	}
-
-	/**
-	 * Getter for <code>$passwordHashAlgorithm</code>.
-	 * @link $passwordHashAlgorithm
-	 * @return string
-	 */
-	public final function getPasswordHashAlgorithm() {
-		return $this->passwordHashAlgorithm;
-	}
-
-	/**
-	 * Getter for <code>$loginDisabled</code>.
-	 * @return boolean
-	 */
-	public final function getLoginDisabled() {
-		$this->loginDisabled;
-	}
-
-	/**
-	 * Check for correct login data and user is not disabled.
-	 * @param string $name name from the user
-	 * @param string $password password from the user (plain text)
-	 * @return boolean true if login tupel are correct, otherwise false.
-	 */
-	public final function isLoginOK($name, $password) {
-		if($this->getPasswordHashAlgorithm()) {
-			$password = hash($this->getPasswordHashAlgorithm(), $password);
-		}
-
-		if(
-			!	$this->getLoginDisabled()
-			&&	$this->getName() == $name
-			&&	$this->getPassword() == $password
-		) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Check if the user is in a single group.
-	 * @param array $groups array of strings with group names.
-	 * @return boolean true if the user is in the group array, otherwise false.
-	 */
-	public final function isInGroups($groups) {
-		foreach($groups as $group) {
-			if(in_array($group, $this->getGroups())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Check if the user is in array.
-	 * @param array $users array of strings with group names.
-	 * @return boolean true if the user is in the group array, otherwise false.
-	 */
-	public final function isInUsers($users) {
-		foreach($users as $user) {
-			if($user == $this->getName()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Return an user object if valid user found.
-	 * @param array $users
-	 * @param string $name
-	 * @param string $password
-	 * @return mixed return a user object if success, otherwise false
-	 */
-	public final static function getObjByNameAndPassword(
-		$users, $name, $password
-	) {
-		foreach($users as $user) {
-			if($user->isLoginOK($name, $password)) {
-				return $user;
-			}
-		}
-		return false;
-	}
+    /**
+     * Return an user object if valid user found.
+     * @param array $users
+     * @param string $name
+     * @param string $password
+     * @return User return a user object if success, otherwise null
+     */
+    public final static function getObjByNameAndPassword(
+        $users, $name, $password
+    )
+    {
+        foreach ($users as $user) {
+            /** @var User $user */
+            if ($user->isLoginOK($name, $password)) {
+                return $user;
+            }
+        }
+        return null;
+    }
 
 }
 

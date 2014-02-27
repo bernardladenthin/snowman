@@ -23,6 +23,8 @@
  * Main file to receive a camera image.
  */
 require_once('globalconfig.php');
+use net\ladenthin\snowman\phpserver\Camera;
+use net\ladenthin\snowman\phpserver\Camerawriter;
 
 $response = new stdClass();
 $response->imageUpload = new stdClass();
@@ -36,142 +38,141 @@ $uploadMethodFile = 0;
 $uploadMethodRequest = 1;
 
 if (!$isloginok) {
-	$response->imageUpload->success = false;
-	$response->imageUpload->wrongLogin = true;
+    $response->imageUpload->success = false;
+    $response->imageUpload->wrongLogin = true;
 } else {
-	if(
-				isset($_REQUEST[$uploadNameCameraname])
-		&&	isset($_FILES[$uploadNameCameraimage])
-		&&	(
-					$_FILES[$uploadNameCameraimage]['type'] == 'image/jpeg'
-			||	$_FILES[$uploadNameCameraimage]['type'] == 'image/jpg'
-			||	$_FILES[$uploadNameCameraimage]['type'] == 'application/octet-stream'
-		)
-	) {
-		$uploadMethod = $uploadMethodFile;
-	} else if (
-				isset($_REQUEST[$uploadNameCameraname])
-		&&	isset($_REQUEST[$uploadNameCameraimage])
-		&&	isset($_REQUEST[$uploadNameFilename])
-	) {
-			$uploadMethod = $uploadMethodRequest;
-	} else {
-			$response->imageUpload->success = false;
-			$response->imageUpload->wrongRequest = true;
-	}
+    if (
+        isset($_REQUEST[$uploadNameCameraname])
+        && isset($_FILES[$uploadNameCameraimage])
+        && (
+            $_FILES[$uploadNameCameraimage]['type'] == 'image/jpeg'
+            || $_FILES[$uploadNameCameraimage]['type'] == 'image/jpg'
+            || $_FILES[$uploadNameCameraimage]['type'] == 'application/octet-stream'
+        )
+    ) {
+        $uploadMethod = $uploadMethodFile;
+    } else if (
+        isset($_REQUEST[$uploadNameCameraname])
+        && isset($_REQUEST[$uploadNameCameraimage])
+        && isset($_REQUEST[$uploadNameFilename])
+    ) {
+        $uploadMethod = $uploadMethodRequest;
+    } else {
+        $response->imageUpload->success = false;
+        $response->imageUpload->wrongRequest = true;
+    }
 }
 
 if ($isloginok && ($uploadMethod != $uploadMethodWrong)) {
-	$cameraname = urldecode($_REQUEST[$uploadNameCameraname]);
-	$camera = camera::getObjByName($snowman->getCameras(), $cameraname);
+    $cameraname = urldecode($_REQUEST[$uploadNameCameraname]);
+    $camera = Camera::getObjByName($snowman->getCameras(), $cameraname);
 
-	$rawFileName = "";
-	$tmpFilePath = "";
+    $rawFileName = "";
+    $tmpFilePath = "";
 
-	if ($uploadMethod == $uploadMethodFile) {
-		$rawFileName = $_FILES[$uploadNameCameraimage]['name'];
-		$tmpFilePath = $_FILES[$uploadNameCameraimage]['tmp_name'];
-	} else if($uploadMethod == $uploadMethodRequest) {
-		$rawFileName = $_REQUEST[$uploadNameFilename];
-		$tmpFileHandle = tmpfile();
-		fwrite($tmpFileHandle, $_REQUEST[$uploadNameCameraimage]);
-		fseek($tmpFileHandle, 0);
-		$tmpFilePath = array_search(
-			'uri',
-			@array_flip(stream_get_meta_data($tmpFileHandle))
-		);
-	}
+    if ($uploadMethod == $uploadMethodFile) {
+        $rawFileName = $_FILES[$uploadNameCameraimage]['name'];
+        $tmpFilePath = $_FILES[$uploadNameCameraimage]['tmp_name'];
+    } else if ($uploadMethod == $uploadMethodRequest) {
+        $rawFileName = $_REQUEST[$uploadNameFilename];
+        $tmpFileHandle = tmpfile();
+        fwrite($tmpFileHandle, $_REQUEST[$uploadNameCameraimage]);
+        fseek($tmpFileHandle, 0);
+        $tmpFilePath = array_search(
+            'uri',
+            @array_flip(stream_get_meta_data($tmpFileHandle))
+        );
+    }
 
-	if(is_object($camera)) {
-		$camerawriter = new Camerawriter($camera);
+    if (is_object($camera)) {
+        $camerawriter = new Camerawriter($camera);
 
-		$camerawriter->loadSpecificImage($tmpFilePath);
+        $camerawriter->loadSpecificImage($tmpFilePath);
 
-		$form = $camerawriter->decodeFilename($rawFileName);
+        $form = $camerawriter->decodeFilename($rawFileName);
 
-		if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
-			$logmsg = "Uploaded\nRAW request: ".$rawFileName.";";
-		}
+        if ($camerawriter->getCamera()->getCCamera()->isLogRawCameraUpload()) {
+            $logmsg = "Uploaded\nRAW request: " . $rawFileName . ";";
+        }
 
-		if (is_array($form)) {
-			/**
-			 * The upload format tells us only the begin, the fps an the
-			 * current one, calculate the correct time this would be rounded
-			 * and could have a multuple appearance if the fps > 1
-			 */
-			$posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
+        if (is_array($form)) {
+            /**
+             * The upload format tells us only the begin, the fps an the
+             * current one, calculate the correct time this would be rounded
+             * and could have a multuple appearance if the fps > 1
+             */
+            $posixMillis = Camerawriter::decodedFilenameToPOSIXMillis($form);
 
-			if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
-				$logmsg .= "\nposixMillis: $posixMillis";
-			}
+            if ($camerawriter->getCamera()->getCCamera()->isLogRawCameraUpload()) {
+                $logmsg .= "\nposixMillis: $posixMillis";
+            }
 
-			$watermarkMsg = $camerawriter->createWatermark($posixMillis);
+            $watermarkMsg = $camerawriter->createWatermark($posixMillis);
 
-			if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
-				$logmsg .= "\nwatermarkMsg: $watermarkMsg\n\n";
-			}
+            if ($camerawriter->getCamera()->getCCamera()->isLogRawCameraUpload()) {
+                $logmsg .= "\nwatermarkMsg: $watermarkMsg\n\n";
+            }
 
-			$camerawriter->createBottomTextBranding();
-			//write the image with original filename from upload
-			//check before write to correct file name
-			$fileinfo = pathinfo($rawFileName);
+            $camerawriter->createBottomTextBranding();
+            //write the image with original filename from upload
+            //check before write to correct file name
+            $fileinfo = pathinfo($rawFileName);
 
-			if (
-				in_array(
-					$fileinfo['extension'],
-					$camerawriter->getCamera()->getImageExtensions()
-				)
-			) {
-				$filename = "";
-				if ($camera->getCamerawriterFormatPosixMillis()) {
-					//use POSIX millis format
-					$filename =
-					$form['cameraname'] .
-					'_' .
-					(string)$posixMillis .
-					'.' .
-					$form['extension'];
-				} else {
-					//use original filename
-					$filename = $rawFileName;
-				}
+            if (
+            in_array(
+                $fileinfo['extension'],
+                $camerawriter->getCamera()->getCCamera()->getImageExtensions()
+            )
+            ) {
+                $filename = "";
+                if ($camera->getCCamera()->isCamerawriterFormatPosixMillis()) {
+                    //use POSIX millis format
+                    $filename =
+                        $form['cameraname'] .
+                        '_' .
+                        (string)$posixMillis .
+                        '.' .
+                        $form['extension'];
+                } else {
+                    //use original filename
+                    $filename = $rawFileName;
+                }
 
-				$success = $camerawriter->writeToFile($filename);
+                $success = $camerawriter->writeToFile($filename);
 
 
-				if ($camerawriter->getCamera()->getLogRawCameraUpload()) {
-					$camerawriter->getCamera()->writeLog($logmsg);
-				}
+                if ($camerawriter->getCamera()->getCCamera()->isLogRawCameraUpload()) {
+                    $camerawriter->getCamera()->writeLog($logmsg);
+                }
 
-				if ($success) {
-					unset($camerawriter);
-					$response->imageUpload->success = true;
-				} else {
-					$response->imageUpload->success = false;
-					$response->imageUpload->writeToFileError = true;
-				}
-			} else {
-				$response->imageUpload->success = false;
-				$response->imageUpload->unknownFileExtension = true;
-			}
-		} else {
-			$response->imageUpload->success = false;
-			$response->imageUpload->unknownFileNameFormat = true;
-		}
-	}
-	else {
-		$response->imageUpload->success = false;
-		$response->imageUpload->unknownCamera = true;
-	}
+                if ($success) {
+                    unset($camerawriter);
+                    $response->imageUpload->success = true;
+                } else {
+                    $response->imageUpload->success = false;
+                    $response->imageUpload->writeToFileError = true;
+                }
+            } else {
+                $response->imageUpload->success = false;
+                $response->imageUpload->unknownFileExtension = true;
+            }
+        } else {
+            $response->imageUpload->success = false;
+            $response->imageUpload->unknownFileNameFormat = true;
+        }
+    } else {
+        $response->imageUpload->success = false;
+        $response->imageUpload->unknownCamera = true;
+    }
 } else {
-	$response->imageUpload->success = false;
-	$response->imageUpload->unknownError = true;
+    $response->imageUpload->success = false;
+    $response->imageUpload->unknownError = true;
 }
 
 $json = json_encode($response);
 
 if ($jsonpCallback) {
-	$json = $jsonpCallback."(".$json.")";
+    $json = $jsonpCallback . "(" . $json . ")";
 }
 echo $json;
 

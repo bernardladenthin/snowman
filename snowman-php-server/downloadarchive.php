@@ -30,18 +30,18 @@ require_once('globalconfig.php');
  */
 try {
 
-	$downloadarchive = new Downloadarchive($snowman, JSON_decode($json));
+    $downloadarchive = new \net\ladenthin\snowman\phpserver\Downloadarchive($snowman, JSON_decode($json));
 
-	if($downloadarchive->isSafeArchiveRequest()) {
-		$downloadarchive->sendArchive();
-	} else {
-		echo "error";
-	}
+    if ($downloadarchive->isSafeArchiveRequest()) {
+        $downloadarchive->sendArchive();
+    } else {
+        echo "error";
+    }
 
-	ob_flush();
+    ob_flush();
 
 } catch (Exception $e) {
-	echo 'Exception: ', $e->getMessage(), "\n";
-	exit;
+    echo 'Exception: ', $e->getMessage(), "\n";
+    exit;
 }
 

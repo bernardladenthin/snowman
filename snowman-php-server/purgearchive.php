@@ -27,7 +27,7 @@ require_once('globalconfig.php');
 
 /**
  * File for archive creation
-*/
+ */
 $snowman->purgeArchive();
 ob_flush();
 exit;

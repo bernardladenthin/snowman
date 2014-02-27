@@ -24,6 +24,7 @@
  */
 
 require_once('globalconfig.php');
+use net\ladenthin\snowman\phpserver\Camera;
 
 $timeMillis = millitime();
 $posix = getPosixFromMillitime($timeMillis);
@@ -31,42 +32,42 @@ $millis = getMillisFromMillitime($timeMillis);
 
 //cache page (in seconds)
 $dauer = 60 * 24 * 30 * 60; //=30 days
-$exp_gmt = gmdate("D, d M Y H:i:s", $posix + $dauer) ." GMT";
-$mod_gmt = gmdate("D, d M Y H:i:s", getlastmod()) ." GMT";
+$exp_gmt = gmdate("D, d M Y H:i:s", $posix + $dauer) . " GMT";
+$mod_gmt = gmdate("D, d M Y H:i:s", getlastmod()) . " GMT";
 
 header("Expires: " . $exp_gmt);
 header("Last-Modified: " . $mod_gmt);
 header("Cache-Control: private, max-age=" . $dauer);
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Expose-Headers: '.
-	'snowman-timeseconds, snowman-timemillis, snowman-filename');
+header('Access-Control-Expose-Headers: ' .
+    'snowman-timeseconds, snowman-timemillis, snowman-filename');
 
-if(isset($_REQUEST['name']) && $isloginok) {
-	$name = urldecode($_REQUEST['name']);
-	$camera = camera::getObjByName($snowman->getCameras(), $name);
-	if(is_object($camera)) {
-		$cameraviewer = new Cameraviewer($camera);
-		$filename = $cameraviewer->loadImage();
-		//use a offset of 10 pixels for a view branding
-		$cameraviewer->createWatermark($timeMillis,10);
-		$cameraviewer->createBottomTextBranding();
+if (isset($_REQUEST['name']) && $isloginok) {
+    $name = urldecode($_REQUEST['name']);
+    $camera = camera::getObjByName($snowman->getCameras(), $name);
+    if (is_object($camera)) {
+        $cameraviewer = new \net\ladenthin\snowman\phpserver\Cameraviewer($camera);
+        $filename = $cameraviewer->loadImage();
+        //use a offset of 10 pixels for a view branding
+        $cameraviewer->createWatermark($timeMillis, 10);
+        $cameraviewer->createBottomTextBranding();
 
-		header("snowman-timeseconds: " . $posix);
-		header("snowman-timemillis: " . $millis);
-		header("snowman-filename: " . $filename);
+        header("snowman-timeseconds: " . $posix);
+        header("snowman-timemillis: " . $millis);
+        header("snowman-filename: " . $filename);
 
-		if($_REQUEST['base64']=='true') {
-			ob_start();
-			imagejpeg($cameraviewer->getImage());
-			$data = ob_get_clean();
-			header('Content-Type: text/txt');
-			echo base64_encode($data);
-		} else {
-			header('Content-Type: '.$cameraviewer->getContentType());
-			imagejpeg($cameraviewer->getImage());
-		}
-		unset($cameraviewer);
-		exit;
-	}
+        if ($_REQUEST['base64'] == 'true') {
+            ob_start();
+            imagejpeg($cameraviewer->getImage());
+            $data = ob_get_clean();
+            header('Content-Type: text/txt');
+            echo base64_encode($data);
+        } else {
+            header('Content-Type: ' . $cameraviewer->getContentType());
+            imagejpeg($cameraviewer->getImage());
+        }
+        unset($cameraviewer);
+        exit;
+    }
 }
 

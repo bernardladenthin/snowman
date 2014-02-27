@@ -19,279 +19,338 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace net\ladenthin\snowman\phpserver;
+
 /**
- * Class for AJAX request
-*/
-class Ajax {
-	/**
-	 * The snowman instance.
-	 * @link snowman
-	 * @var snowman
-	 */
-	private $snowman;
+ * Class for an AJAX request.
+ */
+class Ajax
+{
+    /**
+     * The snowman instance.
+     * @link snowman
+     * @var Snowman snowman
+     */
+    private $snowman;
 
-	/**
-	 * JSON request from client.
-	 * @var StdClass
-	 */
-	private $JSONRequest;
+    /**
+     * JSON request from client.
+     */
+    private $JSONRequest;
 
-	/**
-	 * JSON response for client.
-	 * @var StdClass
-	 */
-	private $snowmanresponse;
+    /**
+     * JSON response for client.
+     */
+    private $snowmanresponse;
 
-	/**
-	 * Constructor
-	 * {@link JSONRequest}
-	 * @param StdClass $JSONRequest
-	 * @return void
-	 */
-	public function ajax(
-		$snowman,
-		$JSONRequest
-	) {
-		$this->snowman = $snowman;
-		$this->JSONRequest = $JSONRequest;
-		$this->snowmanresponse = new StdClass();
+    /**
+     * Constructor
+     * @param Snowman $snowman
+     * @param \stdClass $JSONRequest The request object.
+     */
+    public function __construct($snowman, $JSONRequest)
+    {
+        $this->snowman = $snowman;
+        $this->JSONRequest = $JSONRequest;
+        $this->snowmanresponse = new \stdClass();
 
-		if(isset($this->JSONRequest->login)) {
-			$this->requestNodeLogin($this->JSONRequest->login);
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->login)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeLogin($this->JSONRequest->login);
+        }
 
-		if(isset($this->JSONRequest->logout)) {
-			$this->requestNodeLogout($this->JSONRequest->logout);
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->logout)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeLogout($this->JSONRequest->logout);
+        }
 
-		if(isset($this->JSONRequest->serverinformation)) {
-			$this->requestNodeServerinformation(
-				$this->JSONRequest->serverinformation
-			);
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->serverinformation)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeServerinformation(
+                $this->JSONRequest->serverinformation
+            );
+        }
 
-		if(isset($this->JSONRequest->camerainformation)) {
-			$this->requestNodeCamerainformation(
-				$this->JSONRequest->camerainformation
-			);
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->camerainformation)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeCamerainformation(
+                $this->JSONRequest->camerainformation
+            );
+        }
 
-		if(isset($this->JSONRequest->command)) {
-			$this->requestNodeCommand($this->JSONRequest->command);
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->command)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeCommand($this->JSONRequest->command);
+        }
 
-		if(isset($this->JSONRequest->getArchiveListing)) {
-			$this->requestNodeGetArchiveListing($this->JSONRequest->getArchiveListing);
-		}
-	}
+        /** @noinspection PhpUndefinedFieldInspection */
+        if (isset($this->JSONRequest->getArchiveListing)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->requestNodeGetArchiveListing($this->JSONRequest->getArchiveListing);
+        }
+    }
 
-	/**
-	 * Getter for <code>$snowmanresponse</code<
-	 * @link $snowmanresponse
-	 * @return string
-	 */
-	public final function getSnowmanResponse() {
-		return $this->snowmanresponse;
-	}
+    /**
+     * Parse login node.
+     * @param \stdClass $node
+     * @return void
+     */
+    private final function requestNodeLogin($node)
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        if ($this->snowman->isLoginOK($node->username, $node->password)) {
+            $this->addResponseLoginTrue();
+        } else {
+            $this->addResponseLoginFalse();
+        }
+    }
 
-	/**
-	 * Parse login node.
-	 * @return void
-	 */
-	private final function requestNodeLogin($node) {
-		if($this->snowman->isLoginOK($node->username, $node->password)) {
-			$this->addResponseLoginTrue();
-		} else {
-			$this->addResponseLoginFalse();
-		}
-	}
+    /**
+     * Add success login status to response.
+     * @return void
+     */
+    private final function addResponseLoginTrue()
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->login = new \stdClass();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->login->status = true;
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->login->sessionid = session_id();
 
-	/**
-	 * Parse serverinformation node.
-	 * @return void
-	 */
-	private final function requestNodeServerinformation($node) {
-		$this->addResponseServerinformation();
-	}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->addResponseUsername($this->snowmanresponse->login);
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->addResponseUsergroups($this->snowmanresponse->login);
+    }
 
-	/**
-	 * Parse camerainformation node.
-	 * @return void
-	 */
-	private final function requestNodeCamerainformation($node) {
-		$this->addResponseCamerainformation();
-	}
+    /**
+     * Add username to node.
+     * @param \stdClass $parent
+     * @return void
+     */
+    private final function addResponseUsername($parent)
+    {
+        $name = $this->snowman->getLoginUser()->getCUser()->getName();
+        $parent->username = $name;
+    }
 
-	/**
-	 * Parse command node.
-	 * @return void
-	 */
-	private final function requestNodeCommand($node) {
-		global $isloginok;
-		$this->snowmanresponse->command = new StdClass();
+    /**
+     * Add usergroups to node.
+     * @param \stdClass $parent
+     * @return void
+     */
+    private final function addResponseUsergroups($parent)
+    {
+        $groups = $this->snowman->getLoginUser()->getCUser()->getGroups();
+        $parent->groups = array();
+        foreach ($groups as $group) {
+            $parent->groups[] = $group;
+        }
+    }
 
-		if(isset($node->createarchive)) {
-			$this->snowmanresponse->command->createarchive = new StdClass();
-			$this->snowmanresponse->command->createarchive->log =
-				$this->snowman->createArchive();
-			$this->snowmanresponse->command->createarchive->success = true;
-		}
+    /**
+     * Add false status to response.
+     * @return void
+     */
+    private final function addResponseLoginFalse()
+    {
+        $this->snowmanresponse->login = new \stdClass();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->login->status = false;
+    }
 
-		if(isset($node->refreshchmod)) {
-			$this->snowmanresponse->command->refreshchmod = new StdClass();
-			if($isloginok) {
-				$this->snowman->refreshChmod();
-				$this->snowmanresponse->command->refreshchmod->success = true;
-			} else {
-				$this->snowmanresponse->command->refreshchmod->success = false;
-			}
-		}
+    /**
+     * Parse logout node.
+     * @param \stdClass $parent
+     * @return void
+     */
+    private final function requestNodeLogout($parent)
+    {
+        global $isloginok;
+        $this->addResponseLogoutTrue();
+        $this->snowman->session_destroy();
+        $isloginok = false;
+    }
 
-	}
+    /**
+     * Add success logout status to response.
+     * @return void
+     */
+    private final function addResponseLogoutTrue()
+    {
+        $this->snowmanresponse->logout = new \stdClass();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->logout->status = true;
+    }
 
-	/**
-	 * Parse getArchiveListing node.
-	 * @return void
-	 */
-	private final function requestNodeGetArchiveListing($node) {
-		global $isloginok;
-		$this->snowmanresponse->archiveListing = new StdClass();
+    /**
+     * Parse serverinformation node.
+     * @param \stdClass $node
+     * @return void
+     */
+    private final function requestNodeServerinformation($node)
+    {
+        $this->addResponseServerinformation();
+    }
 
-		if($isloginok) {
-			$this->snowmanresponse->archiveListing = array();
+    /**
+     * Add serverinformation to response.
+     * @return void
+     */
+    private final function addResponseServerinformation()
+    {
+        $this->snowmanresponse->serverinformation = new \stdClass();
 
-			$accessgrantedcameras = camera::getAccessableCamerasByUser(
-				$this->snowman->getCameras(),
-				$this->snowman->getLoginUser()
-			);
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->ajaxApiUrl =
+            $this->snowman->getCSnowman()->getAjaxApiUrl();
 
-			foreach($accessgrantedcameras as $camera) {
-				$archiveListing = $camera->getArchiveListing();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->imprintUrl =
+            $this->snowman->getCSnowman()->getImprintUrl();
 
-				$this->snowmanresponse->archiveListing[$camera->getName()] =
-					$archiveListing;
-			}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->liveviewUrl =
+            $this->snowman->getCSnowman()->getLiveViewUrl();
 
-		} else {
-			$this->snowmanresponse->archiveListing = false;
-		}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->downloadarchiveurl =
+            $this->snowman->getCSnowman()->getDownloadArchiveUrl();
 
-	}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->version =
+            $this->snowman->getCSnowman()->getVersion();
 
-	/**
-	 * Parse logout node.
-	 * @return void
-	 */
-	private final function requestNodeLogout($parent) {
-		global $isloginok;
-		$this->addResponseLogoutTrue();
-		$this->snowman->session_destroy();
-		$isloginok = false;
-	}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->versionDate =
+            $this->snowman->getCSnowman()->getVersionDate();
 
-	/**
-	 * Add success login status to response.
-	 * @return void
-	 */
-	private final function addResponseLoginTrue() {
-		$this->snowmanresponse->login = new StdClass();
-		$this->snowmanresponse->login->status = true;
-		$this->snowmanresponse->login->sessionid = session_id();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->serverinformation->owner =
+            $this->snowman->getCSnowman()->getOwner();
+    }
 
-		$this->addResponseUsername($this->snowmanresponse->login);
-		$this->addResponseUsergroups($this->snowmanresponse->login);
-	}
+    /**
+     * Parse camerainformation node.
+     * @param \stdClass $node
+     * @return void
+     */
+    private final function requestNodeCamerainformation($node)
+    {
+        $this->addResponseCamerainformation();
+    }
 
-	/**
-	 * Add success logout status to response.
-	 * @return void
-	 */
-	private final function addResponseLogoutTrue() {
-		$this->snowmanresponse->logout = new StdClass();
-		$this->snowmanresponse->logout->status = true;
-	}
+    /**
+     * Add camerainformation to response.
+     * @return void
+     */
+    private final function addResponseCamerainformation()
+    {
+        $accessgrantedcameras = camera::getAccessableCamerasByUser(
+            $this->snowman->getCameras(),
+            $this->snowman->getLoginUser()
+        );
 
-	/**
-	 * Add username to node.
-	 * @return void
-	 */
-	private final function addResponseUsername($parent) {
-		$name = $this->snowman->getLoginUser()->getName();
-		$parent->username = $name;
-	}
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->camerainformation = new \stdClass();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->snowmanresponse->camerainformation->cameras = array();
 
-	/**
-	 * Add usergroups to node.
-	 * @return void
-	 */
-	private final function addResponseUsergroups($parent) {
-		$groups = $this->snowman->getLoginUser()->getGroups();
-		$parent->groups = array();
-		foreach($groups as $group) {
-			$parent->groups[] = $group;
-		}
-	}
+        foreach ($accessgrantedcameras as $camera) {
+            /** @var Camera $camera*/
+            /** @noinspection PhpUndefinedFieldInspection */
+            $currentcamera =
+                $this->snowmanresponse->camerainformation->cameras[] =
+                new \stdClass;
 
-	/**
-	 * Add false status to response.
-	 * @return void
-	 */
-	private final function addResponseLoginFalse() {
-		$this->snowmanresponse->login = new StdClass();
-		$this->snowmanresponse->login->status = false;
-	}
+            $currentcamera->url = urlencode($camera->getCCamera()->getName());
+            $currentcamera->name = $camera->getCCamera()->getName();
+            $currentcamera->refresh = $camera->getCCamera()->getRefresh();
+        }
+    }
 
-	/**
-	 * Add camerainformation to response.
-	 * @return void
-	 */
-	private final function addResponseCamerainformation() {
-		$accessgrantedcameras = camera::getAccessableCamerasByUser(
-			$this->snowman->getCameras(),
-			$this->snowman->getLoginUser()
-		);
+    /**
+     * Parse command node.
+     * @param \stdClass $node
+     * @return void
+     */
+    private final function requestNodeCommand($node)
+    {
+        global $isloginok;
+        $this->snowmanresponse->command = new \stdClass();
 
-		$this->snowmanresponse->camerainformation = new StdClass();
-		$this->snowmanresponse->camerainformation->cameras = array();
+        if (isset($node->createarchive)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->snowmanresponse->command->createarchive = new \stdClass();
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->snowmanresponse->command->createarchive->log =
+                $this->snowman->createArchive();
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->snowmanresponse->command->createarchive->success = true;
+        }
 
-		foreach($accessgrantedcameras as $camera) {
-			$currentcamera =
-				$this->snowmanresponse->camerainformation->cameras[] =
-					new StdClass;
+        if (isset($node->refreshchmod)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->snowmanresponse->command->refreshchmod = new \stdClass();
+            if ($isloginok) {
+                $this->snowman->refreshChmod();
+                /** @noinspection PhpUndefinedFieldInspection */
+                $this->snowmanresponse->command->refreshchmod->success = true;
+            } else {
+                /** @noinspection PhpUndefinedFieldInspection */
+                $this->snowmanresponse->command->refreshchmod->success = false;
+            }
+        }
 
-			$currentcamera->url = urlencode($camera->getName());
-			$currentcamera->name = $camera->getName();
-			$currentcamera->refresh = $camera->getRefresh();
-		}
-	}
+    }
 
-	/**
-	 * Add serverinformation to response.
-	 * @return void
-	 */
-	private final function addResponseServerinformation() {
-		$this->snowmanresponse->serverinformation = new StdClass();
+    /**
+     * Parse getArchiveListing node.
+     * @param \stdClass $node
+     * @return void
+     */
+    private final function requestNodeGetArchiveListing($node)
+    {
+        global $isloginok;
+        $this->snowmanresponse->archiveListing = new \stdClass();
 
-		$this->snowmanresponse->serverinformation->ajaxApiUrl =
-			$this->snowman->getAjaxApiUrl();
+        if ($isloginok) {
+            $this->snowmanresponse->archiveListing = array();
 
-		$this->snowmanresponse->serverinformation->imprintUrl =
-			$this->snowman->getImprintUrl();
+            $accessgrantedcameras = camera::getAccessableCamerasByUser(
+                $this->snowman->getCameras(),
+                $this->snowman->getLoginUser()
+            );
 
-		$this->snowmanresponse->serverinformation->liveviewUrl =
-			$this->snowman->getLiveviewUrl();
+            foreach ($accessgrantedcameras as $camera) {
+                /** @var Camera $camera*/
+                $archiveListing = $camera->getArchiveListing();
 
-		$this->snowmanresponse->serverinformation->downloadarchiveurl =
-			$this->snowman->getDownloadarchiveurl();
+                /** @noinspection PhpUndefinedFieldInspection */
+                $this->snowmanresponse->archiveListing[$camera->getCCamera()->getName()] =
+                    $archiveListing;
+            }
 
-		$this->snowmanresponse->serverinformation->version =
-			$this->snowman->getVersion();
+        } else {
+            $this->snowmanresponse->archiveListing = false;
+        }
 
-		$this->snowmanresponse->serverinformation->versionDate =
-			$this->snowman->getVersionDate();
+    }
 
-		$this->snowmanresponse->serverinformation->owner =
-			$this->snowman->getOwner();
-	}
+    /**
+     * Returns the snowman response.
+     * @link $snowmanresponse
+     * @return \stdClass
+     */
+    public final function getSnowmanResponse()
+    {
+        return $this->snowmanresponse;
+    }
 }
 

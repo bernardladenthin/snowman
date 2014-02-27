@@ -20,14 +20,14 @@
  */
 
 /**
- * Main file for simply command to create an archive.
+ * Main file for a simply command to create an archive.
  */
 
 require_once('globalconfig.php');
 
 /**
  * File for archive creation
-*/
+ */
 $snowman->createArchive();
 ob_flush();
 exit;
