@@ -136,11 +136,11 @@ function JSONaction(jData) {
 }
 
 function JSONactionDownloadArchive(jData) {
-	//console.log("Download: ");
-	//console.log(jData);
 	window.open(
 		appData.serverinformation.downloadarchiveurl
 			+"?json=" + JSON.stringify(jData)
+			+"&username=" + appData.username
+			+"&password=" + appData.password
 		,'download archive'
 	);
 }
@@ -156,6 +156,7 @@ function logoutNode(parent) {
 
 function loginNode(parent) {
 	if(parent.status) {
+		appData.password = $(toIdSel(htmlDef.page.login.content.loginPassword.id)).val();
 		$(toIdSel(htmlDef.page.login.content.loginUsername.id)).val(htmlConst.string.empty);
 		$(toIdSel(htmlDef.page.login.content.loginPassword.id)).val(htmlConst.string.empty);
 
