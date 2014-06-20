@@ -113,7 +113,7 @@ function getSnowmanHtml5Canvasapi() {
 		});
 	};
 
-	//TODO: add here a information callback
+	//TODO: add here an information callback
 /*
 function connect() {
 	hostname = arguments[0] || "localhost";
