@@ -246,7 +246,6 @@ class Downloadarchive
      * Indicates whether the request is correct.
      * @return true if the download request is correct, otherwise false
      */
-    //TODO: flag for xsendfile
     public final function sendArchive()
     {
         $file = $this->getCamera()->getCCamera()->getArchive()->getDir();
@@ -255,20 +254,37 @@ class Downloadarchive
             $file .= $sub;
         }
 
-        if (file_exists($file)) {
-            set_time_limit(0);
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . basename($file));
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
+        if (!file_exists($file)) {
+            return;
+        }
+
+        if ($this->snowman->getCSnowman()->isXSendFile()) {
+            header("X-Sendfile: $file");
+            header("Content-type: application/octet-stream");
+            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
             ob_clean();
             flush();
-            readfile($file);
             exit;
+        } else {
+            // do a range-download only for devices that supports byte-ranges
+            if (isset($_SERVER['HTTP_RANGE'])) {
+                rangeDownload($file);
+            } else {
+                // fallback download
+                set_time_limit(0);
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($file));
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($file));
+                ob_clean();
+                flush();
+                readfile($file);
+                exit;
+            }
         }
     }
 
