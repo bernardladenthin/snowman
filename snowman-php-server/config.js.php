@@ -27,7 +27,8 @@
       "archiveOnlyAccessibleCameras":false,
       "secureHosts":[
          "localhost"
-      ]
+      ],
+      "xSendFile" : true
    },
    "users":[
       {
