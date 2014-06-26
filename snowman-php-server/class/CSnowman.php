@@ -31,14 +31,18 @@ class CSnowman
     private $owner;
     private $lcTime;
     private $defaultTimezone;
+
+    /* URLs */
     private $imprintUrl;
     private $ajaxApiUrl;
     private $liveViewUrl;
     private $downloadArchiveUrl;
 
+    /* special flags */
     private $archiveOnlyFromSecureHost;
     private $archiveOnlyAccessibleCameras;
     private $secureHosts;
+    private $xSendFile;
 
     /**
      * Constructor.
@@ -57,11 +61,13 @@ class CSnowman
         /** @noinspection PhpUndefinedFieldInspection */
         $this->defaultTimezone = validateString($stdClass->defaultTimezone);
         /** @noinspection PhpUndefinedFieldInspection */
+        $this->archiveOnlyFromSecureHost = boolval($stdClass->archiveOnlyFromSecureHost);
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->archiveOnlyAccessibleCameras = boolval($stdClass->archiveOnlyAccessibleCameras);
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->secureHosts = validateArray($stdClass->secureHosts);
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->archiveOnlyFromSecureHost = $stdClass->archiveOnlyFromSecureHost;
-        /** @noinspection PhpUndefinedFieldInspection */
-        $this->archiveOnlyAccessibleCameras = $stdClass->archiveOnlyAccessibleCameras;
+        $this->xSendFile = boolval($stdClass->xSendFile);
 
         /** @noinspection PhpUndefinedFieldInspection */
         $url = isLocalIp($_SERVER["REMOTE_ADDR"]) ? $stdClass->localUrl : $stdClass->noLocalUrl;
@@ -184,6 +190,15 @@ class CSnowman
     public final function getSecureHosts()
     {
         return $this->secureHosts;
+    }
+
+    /**
+     * Is the policy set an archive will be downloaded via mod-xsendfile.
+     * @return boolean
+     */
+    public final function isXSendFile()
+    {
+        return $this->xSendFile;
     }
 
 }
