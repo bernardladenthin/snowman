@@ -67,16 +67,38 @@ if not options.targetPath:
 srcFile=options.srcPath+"/"+"%d.jpeg"
 targetFile=options.targetPath+"/"+options.date+".mp4"
 
+#avconv [input options] -i [input filename] -codec:v [video options] -codec:a [audio options] [output file options] [output filename]
 avconvexec=[
     "avconv",
-    "-y", #overwrite if file exist
+#overwrite if file exist
+    "-y",
+#input file name
     "-i",
     srcFile,
-    "-c:v",
+#encode video to H.264 using libx264 library
+    "-codec:v",
     "libx264",
+#sets encoding preset for x264
+#ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow
     "-preset",
-    "veryfast",
-    #"slow",
+    "medium",
+#sets video bitrate in bits/s
+    "-b:v",
+    "500k",
+#maxrate and -bufsize forces libx264 to build video in a way,
+#that it could be streamed over 500kbit/s line considering device buffer of 1000kbits.
+    "-maxrate",
+    "500k",
+    "-bufsize",
+    "1000k",
+#scale filter
+#-1 means: resize so the aspect ratio is same.
+#    "-vf",
+#    "scale=-1:360",
+    "-threads",
+    "0",
+#disable audio
+    "-an",
     targetFile
 ]
 
