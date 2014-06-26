@@ -1,0 +1,37 @@
+--- a/000-default.conf
++++ b/000-default.conf
+@@ -11,6 +11,15 @@
+ 	ServerAdmin webmaster@localhost
+ 	DocumentRoot /var/www/html
+ 
++	<Directory /var/www/html/>
++		Options Indexes FollowSymLinks MultiViews
++		AllowOverride AuthConfig FileInfo Limit
++		Order allow,deny
++		allow from all
++		XSendFile On
++		XSendFilePath /var/www/html/snowman-php-server/protected/
++	</Directory>
++
+ 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+ 	# error, crit, alert, emerg.
+ 	# It is also possible to configure the loglevel for particular
+--- a/default-ssl.conf
++++ b/default-ssl.conf
+@@ -4,6 +4,15 @@
+ 
+ 		DocumentRoot /var/www/html
+ 
++		<Directory /var/www/html/>
++			Options Indexes FollowSymLinks MultiViews
++			AllowOverride AuthConfig FileInfo Limit
++			Order allow,deny
++			allow from all
++			XSendFile On
++			XSendFilePath /var/www/html/snowman-php-server/protected/
++		</Directory>
++
+ 		# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+ 		# error, crit, alert, emerg.
+ 		# It is also possible to configure the loglevel for particular
+
