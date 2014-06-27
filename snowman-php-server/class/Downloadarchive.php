@@ -258,30 +258,51 @@ class Downloadarchive
             return;
         }
 
+        $contentType = "Content-type: application/octet-stream";
+        //$ext = pathinfo($file, PATHINFO_EXTENSION);
+        // substr is faster than pathinfo
+        $ext = substr(strrchr($file, "."), 1);
+        switch ($ext) {
+            case "mov" :
+                $contentType = 'Content-type: video/quicktime';
+                break;
+            case "mp4" :
+                $contentType = 'Content-type: video/mp4';
+                break;
+            case "m4v" :
+                $contentType = 'Content-type: video/x-m4v';
+                break;
+            case "3gp" :
+                $contentType = 'Content-type: video/3gpp';
+                break;
+        }
+
         if ($this->snowman->getCSnowman()->isXSendFile()) {
             header("X-Sendfile: $file");
-            header("Content-type: application/octet-stream");
             header('Content-Disposition: attachment; filename="' . basename($file) . '"');
-            ob_clean();
+            header($contentType);
+            @ob_end_clean();
+            @ob_end_flush();
             flush();
             exit;
         } else {
             // do a range-download only for devices that supports byte-ranges
             if (isset($_SERVER['HTTP_RANGE'])) {
+                header($contentType);
                 rangeDownload($file);
             } else {
                 // fallback download
                 set_time_limit(0);
                 header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
+                header($contentType);
                 header('Content-Disposition: attachment; filename=' . basename($file));
                 header('Content-Transfer-Encoding: binary');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                 header('Pragma: public');
                 header('Content-Length: ' . filesize($file));
-                ob_clean();
-                flush();
+                @ob_end_clean();
+                @ob_end_flush();
                 readfile($file);
                 exit;
             }
