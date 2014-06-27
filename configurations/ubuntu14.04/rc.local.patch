@@ -1,0 +1,13 @@
+--- a/rc.local
++++ b/rc.local
+@@ -11,4 +11,9 @@
+ #
+ # By default this script does nothing.
+ 
++(cd /var/snowman/ && screen -dmS "snowmanimager")
++sleep 1
++execJar="java -jar imager-1.0.0-jar-with-dependencies.jar -c conf.js"
++screen -S "snowmanimager" -p 0 -X exec $execJar
++
+ exit 0
+
