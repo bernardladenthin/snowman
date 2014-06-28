@@ -252,7 +252,8 @@ function createArchiveListing(json) {
 	archiveListingTree.jstree({
 		"core" : {
 			"data" : t
-		}
+		},
+		"plugins" : [ "sort" ]
 	}).bind("select_node.jstree", archiveListingNodeSelected);
 
 }
