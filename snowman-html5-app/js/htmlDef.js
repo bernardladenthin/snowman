@@ -69,6 +69,12 @@ var htmlDef = {
 				"archiveListingCollapsible" : {
 					"id" : "archiveListingCollapsible"
 				},
+				"loginInformationCollapsible" : {
+					"id" : "loginInformationCollapsible"
+				},
+				"specialCommandsCollapsible" : {
+					"id" : "specialCommandsCollapsible"
+				},
 				"archiveListing" : {
 					"id" : "archiveListing"
 				},

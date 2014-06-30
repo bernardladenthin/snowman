@@ -370,6 +370,8 @@ function pageEventHandler(page,show,event,ui) {
 					hideAllNavbars();
 					$(toClSel(htmlDef.navbar.loginFalseWithActiveLogin.cl)).show();
 					archiveListingClearAndCollapse();
+					loginInformationClearAndCollapse();
+					specialCommandsClearAndCollapse();
 				} else {
 					hideAllNavbars();
 					$(toClSel(htmlDef.navbar.loginFalseWithActiveLogin.cl)).show();
@@ -671,7 +673,7 @@ function archiveListingCollapsibleCollapse() {
 function archiveListingClearAndCollapse() {
 	archiveListingClear();
 	var archiveListingCollapsible = $(toIdSel(htmlDef.page.cameras.content.archiveListingCollapsible.id));
-	archiveListingCollapsible.trigger( "collapse" );
+	archiveListingCollapsible.collapsible( "collapse" );
 }
 
 function archiveListingClear() {
@@ -689,6 +691,19 @@ function initCollapsibleContainer() {
 		'collapsiblecollapse', archiveListingCollapsibleCollapse
 	);
 
+}
+
+function loginInformationClearAndCollapse() {
+	var loginInformationCollapsible = $(toIdSel(htmlDef.page.cameras.content.loginInformationCollapsible.id));
+	loginInformationCollapsible.collapsible( "collapse" );
+	$(toIdSel(htmlDef.page.cameras.content.yourUsername.id)).val("");
+	$(toIdSel(htmlDef.page.cameras.content.yourUsergroups.id)).val("");
+}
+
+function specialCommandsClearAndCollapse() {
+	var specialCommandsCollapsible = $(toIdSel(htmlDef.page.cameras.content.specialCommandsCollapsible.id));
+	specialCommandsCollapsible.collapsible( "collapse" );
+	// Nothing to clear.
 }
 
 function initNicescroll() {

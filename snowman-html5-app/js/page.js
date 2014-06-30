@@ -453,6 +453,7 @@ function getPageCameras(){
 						]
 					},
 					{
+						"id" : htmlDef.page.cameras.content.loginInformationCollapsible.id,
 						"attrs": {
 							"data-content-theme": "a",
 							"data-role": "collapsible",
@@ -513,6 +514,7 @@ function getPageCameras(){
 						]
 					},
 					{
+						"id" : htmlDef.page.cameras.content.specialCommandsCollapsible.id,
 						"attrs": {
 							"data-content-theme": "a",
 							"data-role": "collapsible",
