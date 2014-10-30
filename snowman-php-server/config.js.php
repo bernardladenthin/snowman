@@ -62,7 +62,7 @@
    "cameras":[
       {
          "name":"camera0",
-         "toptextbranding":"code.google.com/p/snowman/ | ",
+         "toptextbranding":"http://git.io/JZo55g | ",
          "bottomtextbranding":"This is camera zero.",
          "dir":"protected/camera0_pictures",
          "refresh":700,
@@ -115,7 +115,7 @@
       },
       {
          "name":"camera1",
-         "toptextbranding":"code.google.com/p/snowman/ | ",
+         "toptextbranding":"http://git.io/JZo55g | ",
          "bottomtextbranding":"This is camera one.",
          "dir":"protected/camera1_pictures",
          "refresh":700,
