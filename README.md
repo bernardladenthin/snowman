@@ -26,7 +26,7 @@ snowman is independent of manufacturer scaleable and completely open source.
   * Archiving can optionally be initiated only from secure hosts (secure hosts).
   * Archiving can optionally be carried out only by authorized users manually.
 
-~~~~
+***
 
 ![snowman](https://raw.githubusercontent.com/wiki/bernardladenthin/snowman/images/snowman.png)
 See the [https://github.com/bernardladenthin/snowman/wiki/Installation-guide](Installation guide) to build your own snowman.
