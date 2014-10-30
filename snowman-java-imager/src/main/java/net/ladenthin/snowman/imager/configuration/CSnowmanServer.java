@@ -1,6 +1,6 @@
 /*
  * snowman-java-imager - A tool to upload images on a snowman-php-server.
- * http://code.google.com/p/snowman/
+ * https://github.com/bernardladenthin/snowman
  *
  * Copyright (C) 2014 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *

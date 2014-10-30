@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # snowman-py-ffmpeg - Python script to archive images using ffmpeg.
-# http://code.google.com/p/snowman/
+# https://github.com/bernardladenthin/snowman
 #
 # Copyright 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
 #

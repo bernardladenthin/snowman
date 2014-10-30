@@ -1,7 +1,7 @@
 <?php
 /**
  * snowman-php-server - PHP script to run a snowman server.
- * http://code.google.com/p/snowman/
+ * https://github.com/bernardladenthin/snowman
  *
  * Copyright (C) 2014 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *

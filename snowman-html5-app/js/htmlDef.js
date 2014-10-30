@@ -1,6 +1,6 @@
 /**
  * snowman-html5-app - HTML5 application to connect to the snowman-php-server.
- * http://code.google.com/p/snowman/
+ * https://github.com/bernardladenthin/snowman
  *
  * Copyright (C) 2013 Bernard Ladenthin <bernard.ladenthin@gmail.com>
  *

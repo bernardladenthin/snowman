@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
     <name>imager</name>
     <description>A tool to upload images on a snowman-php-server.</description>
-    <url>http://code.google.com/p/snowman/</url>
+    <url>https://github.com/bernardladenthin/snowman</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -57,9 +57,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:https://code.google.com/p/snowman/</connection>
-        <developerConnection>scm:git:https://code.google.com/p/snowman/</developerConnection>
-        <url>http://code.google.com/p/snowman/source/browse</url>
+        <connection>scm:git:https://github.com/bernardladenthin/snowman</connection>
+        <developerConnection>scm:git:https://github.com/bernardladenthin/snowman</developerConnection>
+        <url>https://github.com/bernardladenthin/snowman</url>
     </scm>
     <dependencies>
         <dependency>
