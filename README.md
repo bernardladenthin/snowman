@@ -28,6 +28,7 @@ snowman is independent of manufacturer scaleable and completely open source.
 
 ***
 
-![snowman](https://raw.githubusercontent.com/wiki/bernardladenthin/snowman/images/snowman.png)
+![snowman](https://raw.githubusercontent.com/wiki/bernardladenthin/snowman/images/snowman-67x100.png)
+
 See the [https://github.com/bernardladenthin/snowman/wiki/Installation-guide](Installation guide) to build your own snowman.
 
