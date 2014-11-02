@@ -15,7 +15,6 @@ By open source nature it is possibe to develop extensions for special needs.
 snowman is independent of manufacturer scaleable and completely open source.
 
 #Features
-  * Licensed under the EUPL.
   * Text-based configuration files.
   * No database is required.
   * Easy to use.
