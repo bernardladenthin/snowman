@@ -12,7 +12,7 @@ Unlike other solutions snowman requires no IP cameras.
 Snowman brings a camera software.
 It is possible to create a CCTV application from a simple USB camera.
 By open source nature it is possibe to develop extensions for special needs.
-snowman is independent of manufacturer scaleable and completely open source.
+snowman is independent of manufacturer, scaleable and completely open source.
 
 #Features
   * Text-based configuration files.
