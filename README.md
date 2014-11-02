@@ -17,13 +17,13 @@ snowman is independent of manufacturer, scaleable and completely open source.
 #Features
   * Text-based configuration files.
   * No database is required.
-  * Easy to use.
-  * Easy to customize.
-  * chmod integrated to the cameras, the archives and the log file outside of OIPCM on the Web server to protect against unauthorized access.
+  * Easy to use and customize.
+  * chmod is used to prevent unauthorized access from outside. Cameras images / videos are only visible through the snowman-php-server. Local access to images, videos and log files is possible.
   * User and group system integrated to assign and manage access rights.
   * Manual archiving function, via cron jobs executed.
   * Archiving can optionally be initiated only from secure hosts (secure hosts).
   * Archiving can optionally be carried out only by authorized users manually.
+  * Older archives will be automatically deleted.
 
 ***
 
