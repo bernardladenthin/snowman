@@ -201,23 +201,29 @@ function commandNode(parent) {
 }
 
 function archiveListingNodeSelected(event, data) {
-	var attr, path;
+	var attr, path, isFolder;
 
-	// failsafe for attr
+	// is the node a folder or an archive
 	if (typeof data.node.original.attr == 'undefined') {
-		return;
+		isFolder = true;
 	}
-	attr = data.node.original.attr;
 
-	// failsafe for path
-	if (typeof attr.path == 'undefined') {
-		return;
+	if (isFolder) {
+		// toggle the node (open or close the folder)
+		var archiveListingTree = $(toIdSel(htmlDef.page.cameras.content.archiveListingTree.id));
+		archiveListingTree.jstree("toggle_node",data.node);
+	} else {
+		attr = data.node.original.attr;
+		// failsafe for path
+		if (typeof attr.path == 'undefined') {
+			return;
+		}
+		path = data.node.original.attr.path;
+
+		// download the archive
+		jPath = JSON.parse(path);
+		actionDownloadArchive(jPath);
 	}
-	path = data.node.original.attr.path;
-
-	// download the archive
-	jPath = JSON.parse(path);
-	actionDownloadArchive(jPath);
 }
 
 function transformListingTreeToJstree(listingTree, parentPath) {
