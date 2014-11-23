@@ -6,7 +6,7 @@
  
 +(cd /var/snowman/ && screen -dmS "snowmanimager")
 +sleep 1
-+execJar="java -jar imager-1.0.0-jar-with-dependencies.jar -c conf.js"
++execJar="java -jar imager-1.1.0-jar-with-dependencies.jar -c conf.js"
 +screen -S "snowmanimager" -p 0 -X exec $execJar
 +
  exit 0
