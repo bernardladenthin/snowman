@@ -201,11 +201,23 @@ function commandNode(parent) {
 }
 
 function archiveListingNodeSelected(event, data) {
-	var path=data.node.original.attr.path;
-	if(path!=undefined) {
-		jPath = JSON.parse(path);
-		actionDownloadArchive(jPath);
+	var attr, path;
+
+	// failsafe for attr
+	if (typeof data.node.original.attr == 'undefined') {
+		return;
 	}
+	attr = data.node.original.attr;
+
+	// failsafe for path
+	if (typeof attr.path == 'undefined') {
+		return;
+	}
+	path = data.node.original.attr.path;
+
+	// download the archive
+	jPath = JSON.parse(path);
+	actionDownloadArchive(jPath);
 }
 
 function transformListingTreeToJstree(listingTree, parentPath) {
