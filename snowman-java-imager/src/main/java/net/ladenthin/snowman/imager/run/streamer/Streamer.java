@@ -29,7 +29,6 @@ import net.ladenthin.snowman.imager.run.watchdog.WatchdogSingleton;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,10 +45,10 @@ public class Streamer implements Runnable {
 
     @Override
     public void run() {
-        final CImager conf = ConfigurationSingleton.getSingleton().getImager();
+        final CImager conf = ConfigurationSingleton.ConfigurationSingleton.getImager();
 
         for (;;) {
-            if (WatchdogSingleton.getSingleton().getWatchdog().getKillFlag() == true) {
+            if (WatchdogSingleton.WatchdogSingleton.getWatchdog().getKillFlag() == true) {
                 LOGGER.trace("killFlag == true");
                 return;
             }

@@ -19,8 +19,6 @@
  */
 package net.ladenthin.snowman.imager.configuration;
 
-import com.google.common.base.Objects;
-
 import java.io.Serializable;
 
 import javax.annotation.concurrent.Immutable;
@@ -53,27 +51,33 @@ public class CUpload implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(ignoreLastFiles, threads);
+        int hash = 7;
+        hash = 23 * hash + this.ignoreLastFiles;
+        hash = 23 * hash + this.threads;
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        if (obj == null) {
+            return false;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final CUpload other = (CUpload) obj;
-        return Objects.equal(this.ignoreLastFiles, other.ignoreLastFiles)
-                && Objects.equal(this.threads, other.threads);
+        if (this.ignoreLastFiles != other.ignoreLastFiles) {
+            return false;
+        }
+        if (this.threads != other.threads) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("ignoreLastFiles", ignoreLastFiles)
-                .add("threads", threads)
-                .toString();
+        return "CUpload{" + "ignoreLastFiles=" + ignoreLastFiles + ", threads=" + threads + '}';
     }
+    
 }

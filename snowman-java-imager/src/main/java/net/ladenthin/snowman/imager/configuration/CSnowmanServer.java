@@ -19,9 +19,8 @@
  */
 package net.ladenthin.snowman.imager.configuration;
 
-import com.google.common.base.Objects;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -42,55 +41,65 @@ public class CSnowmanServer implements Serializable {
 
     public CSnowmanServer(final String apiUrl, final String cameraName, final String username,
         final String password) {
-        this.apiUrl = java.util.Objects.requireNonNull(apiUrl);
-        this.cameraName = java.util.Objects.requireNonNull(cameraName);
-        this.password = java.util.Objects.requireNonNull(password);
-        this.username = java.util.Objects.requireNonNull(username);
+        this.apiUrl = Objects.requireNonNull(apiUrl);
+        this.cameraName = Objects.requireNonNull(cameraName);
+        this.password = Objects.requireNonNull(password);
+        this.username = Objects.requireNonNull(username);
     }
 
     public String getApiUrl() {
-        return java.util.Objects.requireNonNull(apiUrl);
+        return Objects.requireNonNull(apiUrl);
     }
 
     public String getCameraname() {
-        return java.util.Objects.requireNonNull(cameraName);
+        return Objects.requireNonNull(cameraName);
     }
 
     public String getPassword() {
-        return java.util.Objects.requireNonNull(password);
+        return Objects.requireNonNull(password);
     }
 
     public String getUsername() {
-        return java.util.Objects.requireNonNull(username);
+        return Objects.requireNonNull(username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(apiUrl, cameraName, password, username);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.apiUrl);
+        hash = 37 * hash + Objects.hashCode(this.cameraName);
+        hash = 37 * hash + Objects.hashCode(this.password);
+        hash = 37 * hash + Objects.hashCode(this.username);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        if (obj == null) {
+            return false;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final CSnowmanServer other = (CSnowmanServer) obj;
-        return Objects.equal(this.apiUrl, other.apiUrl)
-                && Objects.equal(this.cameraName, other.cameraName)
-                && Objects.equal(this.password, other.password)
-                && Objects.equal(this.username, other.username);
+        if (!Objects.equals(this.apiUrl, other.apiUrl)) {
+            return false;
+        }
+        if (!Objects.equals(this.cameraName, other.cameraName)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("apiUrl", apiUrl)
-                .add("cameraName", cameraName)
-                .add("password", password)
-                .add("username", username)
-                .toString();
+        return "CSnowmanServer{" + "apiUrl=" + apiUrl + ", cameraName=" + cameraName + ", password=" + password + ", username=" + username + '}';
     }
+    
 }

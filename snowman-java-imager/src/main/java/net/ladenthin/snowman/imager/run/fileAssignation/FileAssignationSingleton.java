@@ -33,15 +33,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class FileAssignationSingleton {
+public enum FileAssignationSingleton {
+    FileAssignationSingleton;
 
     private final static Logger LOGGER = LogManager.getLogger(FileAssignationSingleton.class.getName());
-
-    private static FileAssignationSingleton singleton = new FileAssignationSingleton();
-
-    public static synchronized FileAssignationSingleton getSingleton() {
-        return singleton;
-    }
 
     private FileAssignationSingleton() {
     }
@@ -51,9 +46,9 @@ public class FileAssignationSingleton {
 
     private synchronized void fetchFiles() {
         LOGGER.debug("fetchFiles");
-        final File fetchPath = RuntimeSingleton.getSingleton().getStreamerPath();
+        final File fetchPath = RuntimeSingleton.RuntimeSingleton.getStreamerPath();
 
-        final File[] files = fetchPath.listFiles(ImageFilenameFilterSingleton.getSingleton());
+        final File[] files = fetchPath.listFiles(ImageFilenameFilterSingleton.ImageFilenameFilterSingleton);
         if (files.length == 0) {
             return;
         }
@@ -61,8 +56,8 @@ public class FileAssignationSingleton {
         idleFiles.removeAll(obtainedFiles);
         LOGGER.trace("fetched idleFiles.size(): {}", idleFiles.size());
         final int ignoreLastFiles =
-            ConfigurationSingleton.getSingleton().getImager().getUpload().getIgnoreLastFiles();
-        LOGGER.trace("rignoreLastFiles: {}", ignoreLastFiles);
+            ConfigurationSingleton.ConfigurationSingleton.getImager().getUpload().getIgnoreLastFiles();
+        LOGGER.trace("ignoreLastFiles: {}", ignoreLastFiles);
         for (int i = 0; i < ignoreLastFiles; ++i) {
             idleFiles.pollLast();
         }

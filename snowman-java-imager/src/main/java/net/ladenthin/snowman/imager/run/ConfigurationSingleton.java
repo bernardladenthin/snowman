@@ -21,30 +21,18 @@ package net.ladenthin.snowman.imager.run;
 
 import net.ladenthin.snowman.imager.configuration.CImager;
 
-import java.util.Objects;
-
 /**
  * A singleton for the configuration {@link CImager}.
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class ConfigurationSingleton {
-    private static volatile ConfigurationSingleton singleton;
-    private final CImager imager;
+public enum ConfigurationSingleton {
+    ConfigurationSingleton;
+    
+    private CImager imager;
 
-    private ConfigurationSingleton(CImager imager) {
+    public void setImager(CImager imager) {
         this.imager = imager;
-    }
-
-    public static synchronized ConfigurationSingleton getSingleton() {
-        return Objects.requireNonNull(singleton);
-    }
-
-    public static synchronized void setSingleton(CImager imager) {
-        if (ConfigurationSingleton.singleton != null) {
-            throw new RuntimeException("singleton != null");
-        }
-        ConfigurationSingleton.singleton = new ConfigurationSingleton(imager);
     }
 
     public CImager getImager() {

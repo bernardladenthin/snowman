@@ -19,20 +19,19 @@
  */
 package net.ladenthin.snowman.imager.run;
 
+import de.fraunhofer.fokus.eject.ObjectInstantiation;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.ladenthin.snowman.imager.configuration.CImager;
-import net.ladenthin.snowman.imager.run.fileAssignation.FileAssignationSingleton;
 import net.ladenthin.snowman.imager.run.streamer.StreamerSingleton;
 import net.ladenthin.snowman.imager.run.uploader.UploaderSingleton;
 import net.ladenthin.snowman.imager.run.watchdog.WatchdogSingleton;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import de.fraunhofer.fokus.eject.ObjectInstantiation;
 
 /**
  * No documentation.
@@ -42,7 +41,7 @@ import de.fraunhofer.fokus.eject.ObjectInstantiation;
 public class Imager {
 
     public final static String jarFilename = "imager.jar";
-    public final static String version = "1.0.0";
+    public final static String version = "1.2.0";
 
     public final static AtomicBoolean restartFlag = new AtomicBoolean();
 
@@ -62,21 +61,18 @@ public class Imager {
         }
     }
 
-    private void waitForAllThreads() throws InterruptedException {
+    public void waitForAllThreads() throws InterruptedException {
         Thread t;
         LOGGER.debug("Await termination for watchdog thread (no time limit).");
-        t = WatchdogSingleton.getSingleton().getThread();
+        t = WatchdogSingleton.WatchdogSingleton.getThread();
         t.join();
-        if (t.isAlive()) {
-            LOGGER.warn("Watchdog thread still alive, skip.");
-        }
 
         LOGGER.debug("Shutdown all uploading threads.");
-        UploaderSingleton.getSingleton().getExecutor().shutdown();
+        UploaderSingleton.UploaderSingleton.getExecutor().shutdown();
 
         LOGGER.debug("Await termination for all uploading threads (2s time limit).");
         final boolean terminated =
-            UploaderSingleton.getSingleton().getExecutor().awaitTermination(2, TimeUnit.SECONDS);
+            UploaderSingleton.UploaderSingleton.getExecutor().awaitTermination(2, TimeUnit.SECONDS);
         if (terminated) {
             LOGGER.debug("All uploading threads killed successfully.");
         } else {
@@ -84,17 +80,24 @@ public class Imager {
         }
 
         LOGGER.debug("Await termination for streamer thread (2s time limit).");
-        t = StreamerSingleton.getSingleton().getThread();
+        t = StreamerSingleton.StreamerSingleton.getThread();
         t.join(2000);
         if (t.isAlive()) {
             LOGGER.warn("Streamer thread still alive, skip.");
         }
     }
+    
+    public void restartAndExit() throws IOException {
+        if (restartFlag.get() == true) {
+            Runtime.getRuntime().exec(ConfigurationSingleton.ConfigurationSingleton.getImager().getWatchdog().getRestartCommand());
+        }
+        System.exit(0);
+    }
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(
         value = "DM_EXIT",
         justification = "It is intended that the program is fully completed. It could stay at worst unattainable threads in the background.")
-    public Imager(final String configurationPath) throws Exception {
+    public Imager(final String configurationPath) throws IOException, InstantiationException {
         LOGGER.trace("Try to read the configuration file.");
         LOGGER.trace("configurationPath: " + configurationPath);
 
@@ -108,26 +111,18 @@ public class Imager {
 
         LOGGER.debug("configuration: {}", configuration);
 
-        ConfigurationSingleton.setSingleton(configuration);
-
-        final RuntimeSingleton rs = RuntimeSingleton.getSingleton();
+        ConfigurationSingleton.ConfigurationSingleton.setImager(configuration);
 
         LOGGER.debug("initialize streamer path");
-        rs.initializeStreamerPath(configuration.getStreamer().getPath());
+        RuntimeSingleton.RuntimeSingleton.initializeStreamerPath(configuration.getStreamer().getPath());
 
-        if (!rs.isStreamerPathValid()) {
+        if (!RuntimeSingleton.RuntimeSingleton.isStreamerPathValid()) {
             throw new RuntimeException("!rs.isStreamerPathValid()");
         }
 
-        WatchdogSingleton.setSingleton();
-        UploaderSingleton.setSingleton();
-        StreamerSingleton.setSingleton();
-        LOGGER.info("Imager successfully initialized.");
-
-        waitForAllThreads();
-        if (restartFlag.get() == true) {
-            Runtime.getRuntime().exec(configuration.getWatchdog().getRestartCommand());
-        }
-        System.exit(0);
+        WatchdogSingleton.WatchdogSingleton.startWatchdog();
+        UploaderSingleton.UploaderSingleton.createWorkerThreads();
+        StreamerSingleton.StreamerSingleton.startStreamer();
+        LOGGER.info("Imager successfully initialized. Version: " + Imager.version);
     }
 }

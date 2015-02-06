@@ -23,9 +23,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
-
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import java.util.Objects;
 
 /**
  * Configuration class.
@@ -51,14 +50,14 @@ public class CWatchdog implements Serializable {
         }
 
         this.interval = Int.requirePositive(interval);
-        this.restartCommand = java.util.Objects.requireNonNull(restartCommand);
+        this.restartCommand = Objects.requireNonNull(restartCommand);
         this.timeWindow = Int.requirePositive(timeWindow);
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "BC_VACUOUS_INSTANCEOF",
         justification = "It is quite possible that by GSON the type is e.g. ArrayList.")
     public ImmutableList<String> getBlockingProcesses() {
-        java.util.Objects.requireNonNull(blockingProcesses);
+        Objects.requireNonNull(blockingProcesses);
         if (blockingProcesses instanceof ImmutableList) {
             return (ImmutableList<String>) blockingProcesses;
         } else {
@@ -67,7 +66,7 @@ public class CWatchdog implements Serializable {
     }
 
     public List<String> getBlockingProcessesUnsafe() {
-        return java.util.Objects.requireNonNull(blockingProcesses);
+        return Objects.requireNonNull(blockingProcesses);
     }
 
     public int getInterval() {
@@ -75,7 +74,7 @@ public class CWatchdog implements Serializable {
     }
 
     public String getRestartCommand() {
-        return java.util.Objects.requireNonNull(restartCommand);
+        return Objects.requireNonNull(restartCommand);
     }
 
     public int getTimeWindow() {
@@ -84,31 +83,41 @@ public class CWatchdog implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(blockingProcesses, interval, restartCommand, timeWindow);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.blockingProcesses);
+        hash = 89 * hash + this.interval;
+        hash = 89 * hash + Objects.hashCode(this.restartCommand);
+        hash = 89 * hash + this.timeWindow;
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        if (obj == null) {
+            return false;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final CWatchdog other = (CWatchdog) obj;
-        return Objects.equal(this.blockingProcesses, other.blockingProcesses)
-                && Objects.equal(this.interval, other.interval)
-                && Objects.equal(this.restartCommand, other.restartCommand)
-                && Objects.equal(this.timeWindow, other.timeWindow);
+        if (!Objects.equals(this.blockingProcesses, other.blockingProcesses)) {
+            return false;
+        }
+        if (this.interval != other.interval) {
+            return false;
+        }
+        if (!Objects.equals(this.restartCommand, other.restartCommand)) {
+            return false;
+        }
+        if (this.timeWindow != other.timeWindow) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("blockingProcesses", blockingProcesses)
-                .add("interval", interval)
-                .add("restartCommand", restartCommand)
-                .add("timeWindow", timeWindow)
-                .toString();
+        return "CWatchdog{" + "blockingProcesses=" + blockingProcesses + ", interval=" + interval + ", restartCommand=" + restartCommand + ", timeWindow=" + timeWindow + '}';
     }
+    
 }

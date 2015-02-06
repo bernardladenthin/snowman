@@ -19,10 +19,9 @@
  */
 package net.ladenthin.snowman.imager.configuration;
 
-import com.google.common.base.Objects;
-
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Configuration class.
@@ -41,55 +40,65 @@ public class CImager implements Serializable {
 
     public CImager(final CSnowmanServer snowmanServer, final CStreamer streamer,
                    final CUpload upload, final CWatchdog watchdog) {
-        this.snowmanServer = java.util.Objects.requireNonNull(snowmanServer);
-        this.streamer = java.util.Objects.requireNonNull(streamer);
-        this.upload = java.util.Objects.requireNonNull(upload);
-        this.watchdog = java.util.Objects.requireNonNull(watchdog);
+        this.snowmanServer = Objects.requireNonNull(snowmanServer);
+        this.streamer = Objects.requireNonNull(streamer);
+        this.upload = Objects.requireNonNull(upload);
+        this.watchdog = Objects.requireNonNull(watchdog);
     }
 
     public CSnowmanServer getSnowmanServer() {
-        return java.util.Objects.requireNonNull(snowmanServer);
+        return Objects.requireNonNull(snowmanServer);
     }
 
     public CStreamer getStreamer() {
-        return java.util.Objects.requireNonNull(streamer);
+        return Objects.requireNonNull(streamer);
     }
 
     public CUpload getUpload() {
-        return java.util.Objects.requireNonNull(upload);
+        return Objects.requireNonNull(upload);
     }
 
     public CWatchdog getWatchdog() {
-        return java.util.Objects.requireNonNull(watchdog);
+        return Objects.requireNonNull(watchdog);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(snowmanServer, streamer, upload, watchdog);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.snowmanServer);
+        hash = 67 * hash + Objects.hashCode(this.streamer);
+        hash = 67 * hash + Objects.hashCode(this.upload);
+        hash = 67 * hash + Objects.hashCode(this.watchdog);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        if (obj == null) {
+            return false;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final CImager other = (CImager) obj;
-        return Objects.equal(this.snowmanServer, other.snowmanServer)
-                && Objects.equal(this.streamer, other.streamer)
-                && Objects.equal(this.upload, other.upload)
-                && Objects.equal(this.watchdog, other.watchdog);
+        if (!Objects.equals(this.snowmanServer, other.snowmanServer)) {
+            return false;
+        }
+        if (!Objects.equals(this.streamer, other.streamer)) {
+            return false;
+        }
+        if (!Objects.equals(this.upload, other.upload)) {
+            return false;
+        }
+        if (!Objects.equals(this.watchdog, other.watchdog)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("snowmanServer", snowmanServer)
-                .add("streamer", streamer)
-                .add("upload", upload)
-                .add("watchdog", watchdog)
-                .toString();
+        return "CImager{" + "snowmanServer=" + snowmanServer + ", streamer=" + streamer + ", upload=" + upload + ", watchdog=" + watchdog + '}';
     }
+    
 }

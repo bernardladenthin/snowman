@@ -59,24 +59,23 @@ public class Uploader implements Runnable {
     private final static String uploadNamePassword = "password";
     private final static String responseSuccess = "{\"imageUpload\":{\"success\":true}}";
 
-    private final void logIOExceptionAndWait(IOException e) {
+    private void logIOExceptionAndWait(IOException e) {
         LOGGER.warn("Known IOException: {} (maybe no network, wait a little bit)", e.getClass());
         Imager.waitALittleBit(5000);
     }
 
     @Override
     public void run() {
-        final FileAssignationSingleton fas = FileAssignationSingleton.getSingleton();
-        final CImager cs = ConfigurationSingleton.getSingleton().getImager();
+        final CImager cs = ConfigurationSingleton.ConfigurationSingleton.getImager();
         final String url = cs.getSnowmanServer().getApiUrl();
         for (;;) {
             File obtainedFile;
             for (;;) {
-                if (WatchdogSingleton.getSingleton().getWatchdog().getKillFlag() == true) {
+                if (WatchdogSingleton.WatchdogSingleton.getWatchdog().getKillFlag() == true) {
                     LOGGER.trace("killFlag == true");
                     return;
                 }
-                obtainedFile = fas.obtainFile();
+                obtainedFile = FileAssignationSingleton.FileAssignationSingleton.obtainFile();
 
                 if (obtainedFile == null) {
                     Imager.waitALittleBit(300);
@@ -89,8 +88,7 @@ public class Uploader implements Runnable {
             boolean doUpload = true;
             while (doUpload) {
                 try {
-                    final CloseableHttpClient httpclient = HttpClients.createDefault();
-                    try {
+                    try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
                         final HttpPost httppost = new HttpPost(url);
                         final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                         final FileBody fb =
@@ -113,8 +111,7 @@ public class Uploader implements Runnable {
                             LOGGER.trace("executing request " + httppost.getRequestLine());
                         }
 
-                        final CloseableHttpResponse response = httpclient.execute(httppost);
-                        try {
+                        try (CloseableHttpResponse response = httpclient.execute(httppost)) {
                             if (LOGGER.isTraceEnabled()) {
                                 LOGGER.trace("response.getStatusLine(): "
                                     + response.getStatusLine());
@@ -138,11 +135,7 @@ public class Uploader implements Runnable {
                                 // do not flood log files if an error occurred
                                 Imager.waitALittleBit(2000);
                             }
-                        } finally {
-                            response.close();
                         }
-                    } finally {
-                        httpclient.close();
                     }
                 } catch (NoHttpResponseException | SocketException e) {
                     logIOExceptionAndWait(e);
@@ -158,7 +151,7 @@ public class Uploader implements Runnable {
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("delete success {}", delete);
             }
-            fas.freeFile(obtainedFile);
+            FileAssignationSingleton.FileAssignationSingleton.freeFile(obtainedFile);
         }
     }
 

@@ -50,12 +50,11 @@ public class Watchdog implements Runnable {
 
     @Override
     public void run() {
-        final CImager conf = ConfigurationSingleton.getSingleton().getImager();
-        final RuntimeSingleton rs = RuntimeSingleton.getSingleton();
+        final CImager conf = ConfigurationSingleton.ConfigurationSingleton.getImager();
 
         try {
             // create a temporary file to set lastModified
-            boolean delete = File.createTempFile("watchdog", "", rs.getStreamerPath()).delete();
+            boolean delete = File.createTempFile("watchdog", "", RuntimeSingleton.RuntimeSingleton.getStreamerPath()).delete();
             if (!delete) {
                 LOGGER.error("Failed to remove temp watchdog file.");
             }
@@ -67,7 +66,7 @@ public class Watchdog implements Runnable {
                 }
                 Thread.sleep(conf.getWatchdog().getInterval());
                 final long notModified =
-                    System.currentTimeMillis() - rs.getStreamerPath().lastModified();
+                    System.currentTimeMillis() - RuntimeSingleton.RuntimeSingleton.getStreamerPath().lastModified();
 
                 LOGGER.trace("notModified: {}", notModified);
 
@@ -79,7 +78,7 @@ public class Watchdog implements Runnable {
                     for (String processName : conf.getWatchdog().getBlockingProcesses()) {
                         final int pid = getPidof(processName);
                         if (pid != noPIDFound) {
-                            LOGGER.warn("Found blocking process. pid: {},  processName: {}", pid,
+                            LOGGER.warn("Found blocking process. pid: {}, processName: {}", pid,
                                 processName);
                             continue outer;
                         }
@@ -92,7 +91,7 @@ public class Watchdog implements Runnable {
                     LOGGER.debug("modification in timeWindow");
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             LOGGER.error("Exception during run: ", e);
         }
     }

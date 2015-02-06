@@ -19,35 +19,20 @@
  */
 package net.ladenthin.snowman.imager.run.watchdog;
 
-import java.util.Objects;
-
 /**
  * A singleton for the {@link Watchdog}.
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class WatchdogSingleton {
+public enum WatchdogSingleton {
+    WatchdogSingleton;
 
-    private static WatchdogSingleton singleton;
-    private final Thread thread;
-    private final Watchdog watchdog;
+    private final Watchdog watchdog = new Watchdog();
+    private final Thread thread = new Thread(watchdog);
 
-    private WatchdogSingleton() {
-        watchdog = new Watchdog();
-        thread = new Thread(watchdog);
+    public void startWatchdog() {
         thread.setName(Watchdog.class.getName());
         thread.start();
-    }
-
-    public static synchronized WatchdogSingleton getSingleton() {
-        return Objects.requireNonNull(singleton);
-    }
-
-    public static synchronized void setSingleton() {
-        if (WatchdogSingleton.singleton != null) {
-            throw new RuntimeException("singleton != null");
-        }
-        WatchdogSingleton.singleton = new WatchdogSingleton();
     }
 
     public Thread getThread() {

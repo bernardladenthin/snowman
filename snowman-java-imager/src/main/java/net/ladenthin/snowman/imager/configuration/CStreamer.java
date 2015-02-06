@@ -19,9 +19,8 @@
  */
 package net.ladenthin.snowman.imager.configuration;
 
-import com.google.common.base.Objects;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -44,16 +43,16 @@ public class CStreamer implements Serializable {
 
     public CStreamer(final String device, final int framesPerSecond, final String path,
         final int recordTime, final int resolutionX, final int resolutionY) {
-        this.device = java.util.Objects.requireNonNull(device);
+        this.device = Objects.requireNonNull(device);
         this.framesPerSecond = Int.requirePositive(framesPerSecond);
-        this.path = java.util.Objects.requireNonNull(path);
+        this.path = Objects.requireNonNull(path);
         this.recordTime = Int.requirePositive(recordTime);
         this.resolutionX = Int.requirePositive(resolutionX);
         this.resolutionY = Int.requirePositive(resolutionY);
     }
 
     public String getDevice() {
-        return java.util.Objects.requireNonNull(device);
+        return Objects.requireNonNull(device);
     }
 
     public int getFramesPerSecond() {
@@ -61,7 +60,7 @@ public class CStreamer implements Serializable {
     }
 
     public String getPath() {
-        return java.util.Objects.requireNonNull(path);
+        return Objects.requireNonNull(path);
     }
 
     public int getRecordTime() {
@@ -78,35 +77,49 @@ public class CStreamer implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(device, framesPerSecond, path, recordTime, resolutionX, resolutionY);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.device);
+        hash = 37 * hash + this.framesPerSecond;
+        hash = 37 * hash + Objects.hashCode(this.path);
+        hash = 37 * hash + this.recordTime;
+        hash = 37 * hash + this.resolutionX;
+        hash = 37 * hash + this.resolutionY;
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+        if (obj == null) {
+            return false;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final CStreamer other = (CStreamer) obj;
-        return Objects.equal(this.device, other.device)
-                && Objects.equal(this.framesPerSecond, other.framesPerSecond)
-                && Objects.equal(this.path, other.path)
-                && Objects.equal(this.recordTime, other.recordTime)
-                && Objects.equal(this.resolutionX, other.resolutionX)
-                && Objects.equal(this.resolutionY, other.resolutionY);
+        if (!Objects.equals(this.device, other.device)) {
+            return false;
+        }
+        if (this.framesPerSecond != other.framesPerSecond) {
+            return false;
+        }
+        if (!Objects.equals(this.path, other.path)) {
+            return false;
+        }
+        if (this.recordTime != other.recordTime) {
+            return false;
+        }
+        if (this.resolutionX != other.resolutionX) {
+            return false;
+        }
+        if (this.resolutionY != other.resolutionY) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("device", device)
-                .add("framesPerSecond", framesPerSecond)
-                .add("path", path)
-                .add("recordTime", recordTime)
-                .add("resolutionX", resolutionX)
-                .add("resolutionY", resolutionY)
-                .toString();
+        return "CStreamer{" + "device=" + device + ", framesPerSecond=" + framesPerSecond + ", path=" + path + ", recordTime=" + recordTime + ", resolutionX=" + resolutionX + ", resolutionY=" + resolutionY + '}';
     }
+    
 }

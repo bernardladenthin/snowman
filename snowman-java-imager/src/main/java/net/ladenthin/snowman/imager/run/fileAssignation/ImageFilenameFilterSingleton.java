@@ -27,16 +27,8 @@ import java.io.FilenameFilter;
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class ImageFilenameFilterSingleton implements FilenameFilter {
-
-    private static ImageFilenameFilterSingleton singleton = new ImageFilenameFilterSingleton();
-
-    private ImageFilenameFilterSingleton() {
-    }
-
-    public static synchronized ImageFilenameFilterSingleton getSingleton() {
-        return singleton;
-    }
+public enum ImageFilenameFilterSingleton implements FilenameFilter {
+    ImageFilenameFilterSingleton;
 
     @Override
     public boolean accept(final File dir, final String name) {
@@ -46,9 +38,9 @@ public class ImageFilenameFilterSingleton implements FilenameFilter {
         String fExtension = lName.substring(dot + 1);
 
         switch (fExtension) {
-        case "jpeg":
-        case "jpg":
-            return true;
+            case "jpeg":
+            case "jpg":
+                return true;
         }
 
         return false;

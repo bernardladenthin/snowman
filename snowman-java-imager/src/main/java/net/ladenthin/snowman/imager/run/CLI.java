@@ -19,11 +19,13 @@
  */
 package net.ladenthin.snowman.imager.run;
 
+import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,9 +92,11 @@ public class CLI {
                 return;
             }
 
-            new Imager(configurationPath);
+            Imager imager = new Imager(configurationPath);
+            imager.waitForAllThreads();
+            imager.restartAndExit();
 
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | ParseException | IOException | InstantiationException | InterruptedException e) {
             LOGGER.error("Critical exception.", e);
             System.exit(-1);
         }

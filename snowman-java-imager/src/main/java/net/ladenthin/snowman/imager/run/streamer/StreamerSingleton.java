@@ -19,35 +19,21 @@
  */
 package net.ladenthin.snowman.imager.run.streamer;
 
-import java.util.Objects;
-
 /**
  * A singleton for the {@link Streamer}.
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class StreamerSingleton {
+public enum StreamerSingleton {
+    StreamerSingleton;
+    
+    private final Thread thread = new Thread(new Streamer());
 
-    private static StreamerSingleton singleton;
-    private final Thread thread;
-
-    private StreamerSingleton() {
-        thread = new Thread(new Streamer());
+    public void startStreamer() {
         thread.setName(Streamer.class.getName());
         thread.start();
     }
-
-    public static synchronized StreamerSingleton getSingleton() {
-        return Objects.requireNonNull(singleton);
-    }
-
-    public static synchronized void setSingleton() {
-        if (StreamerSingleton.singleton != null) {
-            throw new RuntimeException("singleton != null");
-        }
-        StreamerSingleton.singleton = new StreamerSingleton();
-    }
-
+    
     public Thread getThread() {
         return thread;
     }

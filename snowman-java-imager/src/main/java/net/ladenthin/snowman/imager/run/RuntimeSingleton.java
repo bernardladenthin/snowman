@@ -20,7 +20,6 @@
 package net.ladenthin.snowman.imager.run;
 
 import java.io.File;
-import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,18 +29,11 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
  */
-public class RuntimeSingleton {
+public enum RuntimeSingleton {
+    RuntimeSingleton;
 
-    private static RuntimeSingleton singleton = new RuntimeSingleton();
     public final static Logger LOGGER = LogManager.getLogger(RuntimeSingleton.class.getName());
     private File streamerPath;
-
-    private RuntimeSingleton() {
-    }
-
-    public static RuntimeSingleton getSingleton() {
-        return Objects.requireNonNull(singleton);
-    }
 
     public void initializeStreamerPath(String pathname) {
         streamerPath = new File(pathname);
