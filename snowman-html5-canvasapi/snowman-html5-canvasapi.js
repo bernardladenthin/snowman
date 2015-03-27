@@ -1,7 +1,7 @@
 /*jslint devel: true, browser: true */
 /*global jQuery*/
-// test this file with http://jshint.com/ and http://jshint.com/
-// version 1.0.1
+// test this file with http://jshint.com/ and http://jslint.com/
+// version 1.1.0
 /**
  * snowman-html5-canvasapi- HTML5 canvas api for snowman.
  * https://github.com/bernardladenthin/snowman
@@ -18,6 +18,8 @@ function getSnowmanHtml5Canvasapi() {
     "use strict";
 
     var snowmanHtml5Canvasapi = {
+        "currentParallelRequests" : 0,
+        "maxParallelRequests" : 3,
         "bDebugLog" : false,
         "data" : {
             "canvas" : false,
@@ -46,6 +48,28 @@ function getSnowmanHtml5Canvasapi() {
 
     snowmanHtml5Canvasapi.setCanvas = function (canvas) {
         snowmanHtml5Canvasapi.data.canvas = canvas;
+    };
+
+    snowmanHtml5Canvasapi.getMaxParallelRequests = function () {
+        return snowmanHtml5Canvasapi.maxParallelRequests;
+    };
+
+    snowmanHtml5Canvasapi.setMaxParallelRequests = function (maxParallelRequests) {
+        snowmanHtml5Canvasapi.maxParallelRequests = maxParallelRequests;
+    };
+
+    snowmanHtml5Canvasapi.acquireRequestSlot = function () {
+        if (snowmanHtml5Canvasapi.maxParallelRequests > snowmanHtml5Canvasapi.currentParallelRequests) {
+            // a slot is available, increment
+            snowmanHtml5Canvasapi.currentParallelRequests += 1;
+            return true;
+        }
+        // no slot available
+        return false;
+    };
+
+    snowmanHtml5Canvasapi.permitRequestSlot = function () {
+        snowmanHtml5Canvasapi.currentParallelRequests -= 1;
     };
 
     /**
@@ -81,8 +105,8 @@ function getSnowmanHtml5Canvasapi() {
     snowmanHtml5Canvasapi.initCanvas = function () {
         var canvas = snowmanHtml5Canvasapi.getCanvas(), width, height, ctx;
         if (canvas[0].getContext) {
-            width = 250;
-            height = 250;
+            width = 640;
+            height = 360;
 
             canvas[0].width = width;
             canvas[0].height = height;
@@ -99,6 +123,9 @@ function getSnowmanHtml5Canvasapi() {
 
     snowmanHtml5Canvasapi.fetchImage = function (name, url, additionalData) {
         var time, timestamp, data;
+        if (snowmanHtml5Canvasapi.acquireRequestSlot() === false) {
+            return;
+        }
 
         time = new Date();
         timestamp = time.getTime();
@@ -196,6 +223,7 @@ function getSnowmanHtml5Canvasapi() {
     };
 
     snowmanHtml5Canvasapi.completeCb = function (jqXHR, textStatus) {
+        snowmanHtml5Canvasapi.permitRequestSlot();
         snowmanHtml5Canvasapi.debugLog("call liveviewCompleteCb");
         snowmanHtml5Canvasapi.debugLog(jqXHR);
         snowmanHtml5Canvasapi.debugLog(textStatus);
