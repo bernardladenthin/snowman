@@ -70,6 +70,8 @@ class CArchive
         $this->extensions = validateArray($stdClass->extensions);
         /** @noinspection PhpUndefinedFieldInspection */
         $this->extensionsCaseSensitive = boolval($stdClass->extensionsCaseSensitive);
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->purgeTimeLimit = intval($stdClass->purgeTimeLimit);
     }
 
     /**
