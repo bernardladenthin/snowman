@@ -22,7 +22,7 @@ package net.ladenthin.snowman.imager.run.streamer;
 /**
  * A singleton for the {@link Streamer}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum StreamerSingleton {
     StreamerSingleton;

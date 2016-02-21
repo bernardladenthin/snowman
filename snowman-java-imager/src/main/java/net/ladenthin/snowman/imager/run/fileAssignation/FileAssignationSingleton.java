@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * A singleton to assign files.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum FileAssignationSingleton {
     FileAssignationSingleton;

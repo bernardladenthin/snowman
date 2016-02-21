@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * A singleton for runtime objects.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum RuntimeSingleton {
     RuntimeSingleton;

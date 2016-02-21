@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * A singleton for the {@link Uploader}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum UploaderSingleton {
     UploaderSingleton;

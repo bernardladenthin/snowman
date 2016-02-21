@@ -22,7 +22,7 @@ package net.ladenthin.snowman.imager.run.watchdog;
 /**
  * A singleton for the {@link Watchdog}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum WatchdogSingleton {
     WatchdogSingleton;

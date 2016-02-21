@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * This Class provide a command line interface for imager.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public class CLI {
 

@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * No documentation.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public class Imager {
 

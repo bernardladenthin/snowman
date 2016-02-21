@@ -24,7 +24,7 @@ import net.ladenthin.snowman.imager.configuration.CImager;
 /**
  * A singleton for the configuration {@link CImager}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum ConfigurationSingleton {
     ConfigurationSingleton;

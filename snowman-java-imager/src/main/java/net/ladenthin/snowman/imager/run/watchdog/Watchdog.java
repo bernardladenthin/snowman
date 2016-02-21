@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * The {@link Watchdog}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public class Watchdog implements Runnable {
 

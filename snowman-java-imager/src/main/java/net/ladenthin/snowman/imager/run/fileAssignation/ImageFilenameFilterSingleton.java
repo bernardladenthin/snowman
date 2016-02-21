@@ -25,7 +25,7 @@ import java.io.FilenameFilter;
 /**
  * A singleton to implement the {@link FilenameFilter}.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 public enum ImageFilenameFilterSingleton implements FilenameFilter {
     ImageFilenameFilterSingleton;

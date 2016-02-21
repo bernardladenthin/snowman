@@ -26,7 +26,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * Configuration class.
  *
- * @author Bernard Ladenthin <bernard.ladenthin@gmail.com>
+ * @author Bernard Ladenthin: bernard.ladenthin@gmail.com
  */
 @Immutable
 public class CUpload implements Serializable {
