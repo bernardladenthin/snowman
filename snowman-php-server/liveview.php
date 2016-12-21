@@ -31,7 +31,7 @@ $posix = getPosixFromMillitime($timeMillis);
 $millis = getMillisFromMillitime($timeMillis);
 
 //cache page (in seconds)
-$dauer = 60 * 24 * 30 * 60; //=30 days
+$dauer = 60 * 5; //=1 minute in seconds
 $exp_gmt = gmdate("D, d M Y H:i:s", $posix + $dauer) . " GMT";
 $mod_gmt = gmdate("D, d M Y H:i:s", getlastmod()) . " GMT";
 
