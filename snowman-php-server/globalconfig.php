@@ -64,11 +64,13 @@ if (PHP_INT_SIZE < 8) {
 }
 
 if (!checkPHPGDExtension()) {
-    echo "require the php5-gd extension. "
+    echo "Require the gd extension. "
         . "As example "
         . "http://packages.debian.org/de/jessie/php5-gd "
         . "or "
-        . "http://packages.ubuntu.com/en/trusty/php5-gd";
+        . "http://packages.ubuntu.com/en/trusty/php5-gd "
+        . "or "
+        . "http://packages.ubuntu.com/de/xenial/php7.0-gd";
     exit;
 }
 
