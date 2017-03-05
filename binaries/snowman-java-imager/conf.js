@@ -8,7 +8,7 @@
   "streamer" : {
     "device": "/dev/video0",
     "framesPerSecond" : "8",
-    "path" : "pictures",
+    "path" : "/var/snowman/pictures",
     "recordTime" : 180,
     "resolutionX" : "640",
     "resolutionY" : "360"
