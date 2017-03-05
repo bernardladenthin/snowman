@@ -1,0 +1,9 @@
+[Unit]
+Description=snowman java imager
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/snowmanjavaimager.run.sh
+
+[Install]
+WantedBy=multi-user.target
