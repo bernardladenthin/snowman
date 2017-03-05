@@ -19,19 +19,19 @@
  */
 package net.ladenthin.snowman.imager.run;
 
-import de.fraunhofer.fokus.eject.ObjectInstantiation;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.google.gson.Gson;
+import net.ladenthin.javacommons.StreamHelper;
 import net.ladenthin.snowman.imager.configuration.CImager;
 import net.ladenthin.snowman.imager.run.streamer.StreamerSingleton;
 import net.ladenthin.snowman.imager.run.uploader.UploaderSingleton;
 import net.ladenthin.snowman.imager.run.watchdog.WatchdogSingleton;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * No documentation.
@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 public class Imager {
 
     public final static String jarFilename = "imager.jar";
-    public final static String version = "1.2.0";
+    public final static String version = "1.4.0";
 
     public final static AtomicBoolean restartFlag = new AtomicBoolean();
 
@@ -102,12 +102,12 @@ public class Imager {
         LOGGER.trace("configurationPath: " + configurationPath);
 
         final File configurationFile = new File(configurationPath);
-        final ObjectInstantiation<CImager> oi = new ObjectInstantiation<>(CImager.class, false, false, false);
-        final CImager configuration = oi.readFile(configurationFile);
-
-        if (LOGGER.isTraceEnabled()) {
-            LOGGER.trace("ObjectInstantiation log: {}", oi.getLogMessage());
+        if (!configurationFile.exists()) {
+            LOGGER.error("configurationFile does not exist: " + configurationFile.getAbsolutePath());
         }
+        String configurationString = new StreamHelper().readFullyAsUTF8String(configurationFile);
+        LOGGER.trace("configurationString:\n" + configurationString);
+        final CImager configuration = new Gson().fromJson(configurationString, CImager.class);
 
         LOGGER.debug("configuration: {}", configuration);
 

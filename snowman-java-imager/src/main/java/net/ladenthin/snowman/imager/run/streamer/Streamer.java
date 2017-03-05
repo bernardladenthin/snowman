@@ -19,6 +19,7 @@
  */
 package net.ladenthin.snowman.imager.run.streamer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ import net.ladenthin.snowman.imager.run.watchdog.WatchdogSingleton;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,6 +86,9 @@ public class Streamer implements Runnable {
             LOGGER.trace("timeout: {}", timeout);
             final ExecuteWatchdog watchdog = new ExecuteWatchdog(timeout);
             executor.setWatchdog(watchdog);
+            ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+            PumpStreamHandler psh = new PumpStreamHandler(stdout);
+            executor.setStreamHandler(psh);
             try {
                 LOGGER.debug("start process");
                 final int exitValue = executor.execute(cmdLine);
@@ -93,7 +98,15 @@ public class Streamer implements Runnable {
                 if (watchdog.killedProcess()) {
                     LOGGER.warn("Process was killed on purpose by the watchdog ");
                 } else {
+                    String message = stdout.toString();
                     LOGGER.error("Process exited with an error.");
+                    LOGGER.error("e.getMessage(): " + e.getMessage());
+                    LOGGER.error("stdout: " + message);
+                    if (message.contains("panic: reorder buffer full")) {
+                        LOGGER.error("Use top(1) to find out whether your system is too slow. If you use " +
+                                "streamer or xawtv to record, you will get `rate: queueing frame twice' " +
+                                "and `panic: reorder buffer full' messages.");
+                    }
                     Imager.waitALittleBit(5000);
                 }
             }

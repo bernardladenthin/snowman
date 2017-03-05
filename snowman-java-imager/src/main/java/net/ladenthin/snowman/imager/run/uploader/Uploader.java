@@ -85,6 +85,15 @@ public class Uploader implements Runnable {
                 }
             }
 
+            if (obtainedFile.length() == 0) {
+                LOGGER.warn("obtainedFile.length() == 0: {}", obtainedFile);
+                final boolean delete = obtainedFile.delete();
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("delete empty file success: {}", delete);
+                }
+                continue;
+            }
+
             boolean doUpload = true;
             while (doUpload) {
                 try {
@@ -132,6 +141,8 @@ public class Uploader implements Runnable {
                             } else {
                                 LOGGER.warn("false: resString.equals(responseSuccess)");
                                 LOGGER.warn("resString: {}", resString);
+                                LOGGER.warn("response.getStatusLine(): " + response.getStatusLine());
+                                LOGGER.warn("response.getStatusLine().getStatusCode(): " + response.getStatusLine().getStatusCode());
                                 // do not flood log files if an error occurred
                                 Imager.waitALittleBit(2000);
                             }
