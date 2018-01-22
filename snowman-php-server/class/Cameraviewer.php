@@ -81,6 +81,14 @@ class Cameraviewer
 
         $imagefromfile = false;
         if ($filename) {
+            if (!file_exists($filename)) {
+                error_log("file not exists: ".$filename, 0);
+                exit(1);
+            }
+            if (filesize($filename) <= 0) {
+                error_log("filesize equal or less 0: ".$filename, 0);
+                exit(1);
+            }
             $imagefromfile = @imagecreatefromjpeg($filename);
         }
 
