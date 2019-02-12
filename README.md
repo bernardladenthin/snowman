@@ -1,3 +1,5 @@
+For most cases, please use the better alternative **motionEyeOS** at [https://github.com/ccrisan/motioneyeos](https://github.com/ccrisan/motioneyeos).
+
 #snowman
 Simple aNd Open Webcam MANagement.
   * Hosting on GitHub: [https://github.com/bernardladenthin/snowman](https://github.com/bernardladenthin/snowman)
